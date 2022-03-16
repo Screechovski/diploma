@@ -29,6 +29,7 @@ const cube = new THREE.Mesh(geometry, material)
 scene.add(cube)
 
 window.addEventListener('resize', onWindowResize, false)
+
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
