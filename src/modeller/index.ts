@@ -108,21 +108,23 @@ export default class Modeller {
     scene;
     camera;
     renderer;
-    constructor(selector: string){
+    constructor(element: any){
+        const { clientWidth: width, clientHeight: height } = element;
+        
         this.scene = new THREE.Scene()
         this.scene.add(new THREE.AxesHelper(5))
 
         this.camera = new THREE.PerspectiveCamera(
             75,
-            window.innerWidth / window.innerHeight,
+            width / height,
             0.1,
             1000
         )
         this.camera.position.z = 3
 
         this.renderer = new THREE.WebGLRenderer()
-        this.renderer.setSize(window.innerWidth, window.innerHeight)
-        document.querySelector(selector)?.appendChild(this.renderer.domElement)
+        this.renderer.setSize(width, height)
+        element.appendChild(this.renderer.domElement)
         new OrbitControls(this.camera, this.renderer.domElement)
         this.animate()
     }

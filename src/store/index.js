@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import modeller from './modeller/modeller'
+import modeller from '@/store/modeller'
 
 const store = createStore({
     namespaced: true,

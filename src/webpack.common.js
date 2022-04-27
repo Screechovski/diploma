@@ -2,7 +2,7 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-    entry: ['./src/client/modeller/index.ts', './src/client/main.js'],
+    entry: ['./src/modeller/index.ts', './src/main.js'],
     module: {
         rules: [
             {
@@ -33,6 +33,18 @@ module.exports = {
                 test: /\.css$/i,
                 use: ["style-loader", "css-loader"],
             },
+            {
+                test: /\.pug$/,
+                oneOf: [
+                    {
+                        resourceQuery: /^\?vue/,
+                        use: ['pug-plain-loader']
+                    },
+                    {
+                        use: ['raw-loader', 'pug-plain-loader']
+                    }
+                ]
+            }
         ],
     },
     resolve: {
@@ -46,6 +58,6 @@ module.exports = {
     ],
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, '../../dist/client'),
+        path: path.resolve(__dirname, '../public'),
     },
 }

@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import VModeller from '@/components/VModeller'
-import VPanel from '@/components/VPanel'
+import VModeller from '@/components/v.modeller'
+import VPanel from '@/components/v.panel'
 
 export default {
     components: {
@@ -19,7 +19,8 @@ export default {
 .main
     height: 100vh
     display: grid
-    grid-template-rows: 200px 1fr
+    grid-template-rows: 100px 1fr
+    padding: 15px
     &__modeller
     &__panel
 </style>
