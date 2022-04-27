@@ -5,7 +5,7 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { useStore } from "vuex"
-import { cssClass } from "@/helpers/props"
+import { cssClass } from "@/assets/helper"
 
 export default {
     props: {
@@ -25,6 +25,8 @@ export default {
 </script>
 
 <style lang="sass">
+@import "../assets/variables.sass"
+
 .modeller
-    border-radius: $border-radius
+    border-radius: $radius
 </style>

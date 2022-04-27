@@ -1,8 +1,8 @@
 <script>
-import { cssClass } from "@/helpers/props";
+import { cssClass } from "@/assets/helper";
 export default {
     setup() {
-        
+
     },
     props: {
         cssClass,
@@ -23,11 +23,13 @@ button.button(@click="onClick", type="button") {{text}}
 </template>
 
 <style lang="sass" scoped>
+@import "../assets/variables"
+
 .button
     font-size: 14px
-    color: lime
+    color: $button-color
     height: 3em
-    border: 2px solid lime
+    border: 2px solid $button-color
     text-transform: lowercase
     padding: 0em 0.8em
     background-color: transparent

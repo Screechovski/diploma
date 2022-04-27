@@ -1,5 +1,5 @@
 import Modeller from "@/modeller/index"
-import { defaultAction } from "@/helpers/mutations";
+import { defaultAction } from "@/assets/helper";
 
 export default {
     namespaced: true,
@@ -29,7 +29,7 @@ export default {
             camera.aspect = width / height
             camera.updateProjectionMatrix()
             renderer.setSize(width, height)
-            render()
+            // render()
         }
     }
 }

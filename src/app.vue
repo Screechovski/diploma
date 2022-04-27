@@ -5,12 +5,13 @@
 <script>
 import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-import VMain from "@/pages/VMain"
+import VMain from "@/pages/v-main"
+
 export default {
     components: { VMain },
     setup(){
         const store = useStore();
-        
+
         const render = () => store.dispatch("modeller/updateRender");
 
         onMounted(() =>
@@ -23,8 +24,8 @@ export default {
 
 <style lang="sass">
 body
-    $border-radius: 10px
-
+    overflow: hidden
+    background-color: #000
 *
     font-family: 'Source Code Pro', 'DejaVu Sans', serif
     font-weight: 600

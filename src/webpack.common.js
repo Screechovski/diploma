@@ -2,7 +2,7 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-    entry: ['./src/modeller/index.ts', './src/main.js'],
+    entry: ['./src/modeller/index.js', './src/main.js'],
     module: {
         rules: [
             {

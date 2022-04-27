@@ -108,11 +108,20 @@ export default class Modeller {
     scene;
     camera;
     renderer;
-    constructor(element: any){
+    dragging = false;
+    element;
+    squareCoordinates = []
+
+    constructor(element){
         const { clientWidth: width, clientHeight: height } = element;
-        
+        this.element = element;
+        this.rayCaster = new THREE.Raycaster();
+
+        this.element.addEventListener("mousedown", this.onMouseDown)
+
         this.scene = new THREE.Scene()
         this.scene.add(new THREE.AxesHelper(5))
+        this.scene.background = new THREE.Color( 0x0e0e0e );
 
         this.camera = new THREE.PerspectiveCamera(
             75,
@@ -125,19 +134,20 @@ export default class Modeller {
         this.renderer = new THREE.WebGLRenderer()
         this.renderer.setSize(width, height)
         element.appendChild(this.renderer.domElement)
-        new OrbitControls(this.camera, this.renderer.domElement)
+        this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement)
+        this.orbitControls.enabled = false
         this.animate()
     }
 
     animate = () => {
         requestAnimationFrame(this.animate)
-    
+
         this.render()
-    
+
         // stats.update()
     }
-    
-    render = () => {
+
+    render = (a) => {
         this.renderer.render(this.scene, this.camera)
     }
 
@@ -147,5 +157,33 @@ export default class Modeller {
         const sphere = new THREE.Mesh(sphereGeometry, material)
         sphere.position.x = 3
         this.scene.add(sphere)
+    }
+
+    getPosition = (event) => {
+        const offset = this.element.getBoundingClientRect();
+        const position = {
+            x: ((event.clientX - offset.left) / this.element.clientWidth) * 2 - 1,
+            y: -((event.clientY - offset.top) / this.element.clientHeight) * 2 + 1
+        };
+        this.rayCaster.setFromCamera(position, this.camera);
+        const intersects = this.rayCaster.intersectObjects(this.scene.children, true);
+        if (intersects.length > 0) {
+            return intersects[0].point;
+        }
+    }
+
+    onMouseDown = (e) => {
+        const position = this.getPosition(e);
+
+        const planeGeometry = new THREE.PlaneGeometry()
+        const material = new THREE.MeshNormalMaterial()
+        const plane = new THREE.Mesh(planeGeometry, material)
+        plane.position.x = position.x
+        plane.position.y = position.y
+        this.scene.add(plane)
+
+
+        // scene.children[1].position.set(relative.x + vertexSize, relative.y, relative.z);
+        // controls.enabled = false;
     }
 }
