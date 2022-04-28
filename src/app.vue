@@ -1,31 +1,42 @@
-<template>
-    <v-main></v-main>
+<template lang="pug">
+
+v-main
+v-popup-coordinate-axes(v-if="showCoordinateAxes")
+
 </template>
 
 <script>
-import { onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import VMain from "@/pages/v-main"
+import VPopupCoordinateAxes from "@/components/v-popup-coordinate-axes"
 
 export default {
-    components: { VMain },
+    components: { VMain, VPopupCoordinateAxes },
     setup(){
         const store = useStore();
+        const showCoordinateAxes = computed(() => store.getters["popups/coordinateAxes"])
 
-        const render = () => store.dispatch("modeller/updateRender");
+        const updateRender = () => store.dispatch("modeller/updateRender");
 
         onMounted(() =>
-            window.addEventListener("resize", render))
+            window.addEventListener("resize", updateRender))
         onUnmounted(() =>
-            window.removeEventListener("resize", render))
+            window.removeEventListener("resize", updateRender))
+
+        return {
+            showCoordinateAxes
+        }
     }
 }
 </script>
 
 <style lang="sass">
+@import "./assets/variables"
+
 body
     overflow: hidden
-    background-color: #000
+    background-color: $backgroud-dark
 *
     font-family: 'Source Code Pro', 'DejaVu Sans', serif
     font-weight: 600

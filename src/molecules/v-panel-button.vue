@@ -1,33 +1,37 @@
 <template lang="pug">
+
 button(
     type="button",
-    class="panel-button",
-    :class="{ active }",
-    @click="toggleActive"
+    class="panel-button"
+    @click="clickHandler"
+    :class="{active}"
 )
     i(class="panel-button__icon")
         slot
     span(class="panel-button__text") {{text}}
+
 </template>
 
 <script>
-import { ref } from 'vue';
-
 export default {
     props:{
         text: {
             type: String,
             requred: true
+        },
+        active: {
+            type: Boolean,
+            default: false
         }
     },
-    setup(){
-        const active = ref(false);
-
-        const toggleActive = () => {
-            active.value = !active.value
+    setup(popups, context){
+        const clickHandler = () => {
+            context.emit("onClick")
         }
 
-        return { active, toggleActive }
+        return {
+            clickHandler
+        }
     }
 }
 </script>

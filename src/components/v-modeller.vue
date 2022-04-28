@@ -1,9 +1,11 @@
-<template>
-    <div ref="modeller" class="modeller" :class="cssClass"></div>
+<template lang="pug">
+
+section.modeller(:class="{grab, cssClass}", ref="modeller")
+
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from "vuex"
 import { cssClass } from "@/assets/helper"
 
@@ -12,14 +14,16 @@ export default {
         cssClass
     },
     setup(){
-
         const modeller = ref(null)
         const store = useStore()
 
         onMounted(() =>
             store.dispatch("modeller/setRef", modeller.value))
 
-        return { modeller }
+        const grab = computed(() =>
+            store.getters["panel/review"])
+
+        return { modeller, grab }
     }
 }
 </script>
@@ -29,4 +33,7 @@ export default {
 
 .modeller
     border-radius: $radius
+
+.grab
+    cursor: grab
 </style>

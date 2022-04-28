@@ -139,6 +139,11 @@ export default class Modeller {
         this.animate()
     }
 
+    enableOrbitControls = (flag = false) => {
+        console.log("enableOrbitControls", flag);
+        this.orbitControls.enabled = flag
+    }
+
     animate = () => {
         requestAnimationFrame(this.animate)
 
@@ -173,14 +178,14 @@ export default class Modeller {
     }
 
     onMouseDown = (e) => {
-        const position = this.getPosition(e);
+        /*const position = this.getPosition(e);
 
         const planeGeometry = new THREE.PlaneGeometry()
         const material = new THREE.MeshNormalMaterial()
         const plane = new THREE.Mesh(planeGeometry, material)
         plane.position.x = position.x
         plane.position.y = position.y
-        this.scene.add(plane)
+        this.scene.add(plane)*/
 
 
         // scene.children[1].position.set(relative.x + vertexSize, relative.y, relative.z);

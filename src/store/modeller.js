@@ -1,5 +1,5 @@
 import Modeller from "@/modeller/index"
-import { defaultAction } from "@/assets/helper";
+import { defaultMutation } from "@/assets/helper";
 
 export default {
     namespaced: true,
@@ -12,8 +12,8 @@ export default {
 
     },
     mutations: {
-        setInstance: defaultAction('instance'),
-        setRef: defaultAction('ref'),
+        setInstance: defaultMutation('instance'),
+        setRef: defaultMutation('ref'),
     },
     actions: {
         setRef: (context, ref = null) => {
@@ -30,6 +30,9 @@ export default {
             camera.updateProjectionMatrix()
             renderer.setSize(width, height)
             // render()
+        },
+        enableReview: (context, flag) => {
+            context.state.instance.enableOrbitControls(flag);
         }
     }
 }
