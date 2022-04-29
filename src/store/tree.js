@@ -14,5 +14,8 @@ export default {
             const treeItems = await context.dispatch("modeller/getChildrens", null, {root: true});
             context.commit("setTreeList", treeItems)
         },
+        removeItem: (context, id) => {
+            console.log(id);
+        }
     }
 }

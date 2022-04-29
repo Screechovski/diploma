@@ -41,7 +41,7 @@ export default {
         // max-width: calc(100vw - 30px)
     &__modeller
         grid-area: modeller
-        // max-width: calc(100vw - 30px)
+        max-width: calc(100vw - 235px)
     &__status-line
         grid-area: status-line
     &__tree

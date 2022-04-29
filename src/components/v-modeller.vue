@@ -1,6 +1,6 @@
 <template lang="pug">
 
-section.modeller(:class="{grab, cssClass}", ref="modeller")
+section.modeller(:class="{grab, [cssClass]: cssClass}", ref="modeller")
 
 </template>
 

@@ -3,9 +3,13 @@ import { defaultGettersObject } from "@/assets/helper"
 export default {
     namespaced: true,
     state:() => ({
-        coordinateAxes: false
+        coordinateAxes: false,
+        rectangleParams: false,
     }),
-    getters: defaultGettersObject(["coordinateAxes"]),
+    getters: defaultGettersObject([
+        "coordinateAxes",
+        "rectangleParams"
+    ]),
     mutations: {
         showPopup: (state, key) => {
             state[key] = true

@@ -29,9 +29,9 @@ export default {
             const { clientWidth: width, clientHeight: height } = context.state.ref;
 
             camera.aspect = width / height
-            camera.updateProjectionMatrix()
+            // camera.updateProjectionMatrix()
             renderer.setSize(width, height)
-            // render()
+            render()
         },
         enableReview: (context, flag) => {
             context.state.instance.enableOrbitControls(flag);
@@ -42,6 +42,10 @@ export default {
         getChildrens: async (context) => {
             const childrens = await context.state.instance.scene.children;
             return Object.values(childrens);
+        },
+        drawSquare: (context, squareData) => {
+            context.state.instance.addSquare(squareData);
+            context.dispatch("tree/getTree", null, {root:true})
         }
     }
 }

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-v-popup(cssClass="popup-coordinate-axes", pKey="coordinateAxes")
+v-popup(cssClass="popup-coordinate-axes" pKey="coordinateAxes")
     template(#header="") Выбрать рабочую плоскость
     template(#content="")
         .popup-coordinate-axes__inner
@@ -10,7 +10,11 @@ v-popup(cssClass="popup-coordinate-axes", pKey="coordinateAxes")
                 @select="checkboxHandler(i)"
             ) {{box.text}}
     template(#footer="")
-        v-button(text="Выбрать", :disabled="canSubmit", @press="submitHandler")
+        v-button(
+            text="Выбрать",
+            :disabled="!canSubmit",
+            @press="submitHandler"
+        )
 
 </template>
 
@@ -57,7 +61,7 @@ export default {
         }
 
         const canSubmit = computed(() =>
-            checkboxes.every(i => i.selected === false))
+            checkboxes.some(i => i.selected))
 
         return {
             checkboxes,

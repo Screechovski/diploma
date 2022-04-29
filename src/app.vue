@@ -2,6 +2,7 @@
 
 v-main
 v-popup-coordinate-axes(v-if="showCoordinateAxes")
+v-popup-rectangle(v-if="showRectangleParams")
 
 </template>
 
@@ -10,14 +11,22 @@ import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import VMain from "@/pages/v-main"
 import VPopupCoordinateAxes from "@/components/v-popup-coordinate-axes"
+import VPopupRectangle from "@/components/v-popup-rectangle"
+
 
 export default {
-    components: { VMain, VPopupCoordinateAxes },
+    components: {
+        VMain,
+        VPopupCoordinateAxes,
+        VPopupRectangle
+    },
     setup(){
         const store = useStore();
         const showCoordinateAxes = computed(() => store.getters["popups/coordinateAxes"])
+        const showRectangleParams = computed(() => store.getters["popups/rectangleParams"])
 
-        const updateRender = () => store.dispatch("modeller/updateRender");
+        const updateRender = () =>
+            store.dispatch("modeller/updateRender");
 
         onMounted(() =>
             window.addEventListener("resize", updateRender))
@@ -25,7 +34,8 @@ export default {
             window.removeEventListener("resize", updateRender))
 
         return {
-            showCoordinateAxes
+            showCoordinateAxes,
+            showRectangleParams
         }
     }
 }

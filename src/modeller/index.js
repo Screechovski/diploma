@@ -2,107 +2,8 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { GUI } from 'dat.gui'
-/*
-const scene = new THREE.Scene()
-scene.add(new THREE.AxesHelper(5))
 
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-)
-camera.position.z = 3
-
-const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
-
-new OrbitControls(camera, renderer.domElement)
-
-const boxGeometry = new THREE.BoxGeometry()
-const icosahedronGeometry = new THREE.IcosahedronGeometry(1, 0)
-const planeGeometry = new THREE.PlaneGeometry()
-const torusKnotGeometry = new THREE.TorusKnotGeometry()
-
-const material = new THREE.MeshNormalMaterial()
-
-const cube = new THREE.Mesh(boxGeometry, material)
-cube.position.x = 5
-scene.add(cube)
-
-const icosahedron = new THREE.Mesh(icosahedronGeometry, material)
-icosahedron.position.x = 0
-scene.add(icosahedron)
-
-const plane = new THREE.Mesh(planeGeometry, material)
-plane.position.x = -2
-scene.add(plane)
-
-const torusKnot = new THREE.Mesh(torusKnotGeometry, material)
-torusKnot.position.x = -5
-scene.add(torusKnot)
-
-window.addEventListener('resize', onWindowResize, false)
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    render()
-}
-
-const stats = Stats()
-document.body.appendChild(stats.dom)
-
-const options = {
-    side: {
-        FrontSide: THREE.FrontSide,
-        BackSide: THREE.BackSide,
-        DoubleSide: THREE.DoubleSide,
-    },
-}
-
-const gui = new GUI()
-const materialFolder = gui.addFolder('THREE.Material')
-materialFolder.add(material, 'transparent').onChange(() => material.needsUpdate = true)
-materialFolder.add(material, 'opacity', 0, 1, 0.01)
-materialFolder.add(material, 'depthTest')
-materialFolder.add(material, 'depthWrite')
-materialFolder
-    .add(material, 'alphaTest', 0, 1, 0.01)
-    .onChange(() => updateMaterial())
-materialFolder.add(material, 'visible')
-materialFolder
-    .add(material, 'side', options.side)
-    .onChange(() => updateMaterial())
-materialFolder.open()
-
-const meshNormalMaterialFolder = gui.addFolder('THREE.MeshNormalMaterial')
-
-meshNormalMaterialFolder.add(material, 'wireframe')
-meshNormalMaterialFolder
-    .add(material, 'flatShading')
-    .onChange(() => updateMaterial())
-meshNormalMaterialFolder.open()
-
-function updateMaterial() {
-    material.side = Number(material.side)
-    material.needsUpdate = true
-}
-
-function animate() {
-    requestAnimationFrame(animate)
-
-    render()
-
-    stats.update()
-}
-
-function render() {
-    renderer.render(scene, camera)
-}
-
-animate()*/
+let squareCounter = 1;
 
 export default class Modeller {
     scene;
@@ -120,8 +21,8 @@ export default class Modeller {
         this.scene = new THREE.Scene()
         this.scene.background = new THREE.Color( 0x0e0e0e );
 
-        this.camera = new THREE.OrthographicCamera( -3, 3, 3, -3, -1000, 2000);
-        this.camera.position.y = 1
+        this.camera = new THREE.OrthographicCamera( width / -200, width / 200, height / 200, height / -200, -1000, 1000 );
+        this.camera.position.y = 3
 
         this.renderer = new THREE.WebGLRenderer()
         this.renderer.setSize(width, height)
@@ -132,8 +33,6 @@ export default class Modeller {
         element.appendChild(this.renderer.domElement)
 
         this.addAxesHelper()
-        this.addPlane()
-        this.addSphere()
 
         this.animate()
     }
@@ -163,24 +62,38 @@ export default class Modeller {
     }
 
     addSphere = () => {
-        const sphereGeometry = new THREE.SphereGeometry()
+        /*const sphereGeometry = new THREE.SphereGeometry()
         const sphereMaterial = new THREE.MeshNormalMaterial()
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
 
         sphere.name = "Круг"
         sphere.position.x = 3
 
-        this.scene.add(sphere)
+        this.scene.add(sphere)*/
+    }
+
+    addSquare = ({width, height, length, startX, startY, startZ}) => {
+        const squareGeometry = new THREE.BoxGeometry( width, height, length );
+        const squareMaterial = new THREE.MeshBasicMaterial( {color: 0x6c6c6c} );
+        const square = new THREE.Mesh( squareGeometry, squareMaterial );
+
+        square.position.x = width / 2 - startX;
+        square.position.y = height / 2 - startY;
+        square.position.z = length / 2 - startZ;
+        square.name = "Прямоугольник " + squareCounter;
+        squareCounter++;
+
+        this.scene.add( square );
     }
 
     addPlane = () => {
-        const planeGeometry = new THREE.PlaneGeometry( 1, 1 );
+        /*const planeGeometry = new THREE.PlaneGeometry( 1, 1 );
         const planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
         const plane = new THREE.Mesh( planeGeometry, planeMaterial );
 
         plane.name = "Квадрат"
 
-        this.scene.add( plane );
+        this.scene.add( plane );*/
     }
 
     getPosition = (event) => {
@@ -203,6 +116,10 @@ export default class Modeller {
             this.camera.position[coordinate] = !key.includes(coordinate) ? 3 : 0;
         })
         this.controls.update();
+    }
+
+    removeObject = (id) => {
+        this.scene.remove(this.scene.children[id])
     }
 
     onMouseDown = (e) => {

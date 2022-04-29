@@ -24,9 +24,9 @@ export default {
             default: false
         }
     },
-    setup(popups, context){
+    setup(popups, {emit}){
         const clickHandler = () => {
-            context.emit("onClick")
+            emit("onClick")
         }
 
         return {
