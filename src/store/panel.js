@@ -27,6 +27,10 @@ export default {
                 context.commit('toggleReview', true)
                 context.dispatch('modeller/enableReview', true, {root: true})
             }
+        },
+        coordinateAxesSubmit: (context, value) => {
+            context.dispatch('modeller/setCoordinates', value, {root: true})
+            context.dispatch('popups/hidePopup', "coordinateAxes", {root: true})
         }
     }
 }

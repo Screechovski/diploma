@@ -19,6 +19,7 @@ import VPopup from "@/molecules/v-popup"
 import VButton from "@/molecules/v-button"
 import VCheckbox from "@/molecules/v-checkbox"
 import { computed, reactive } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
     components: {
@@ -29,22 +30,30 @@ export default {
     setup(){
         const checkboxes = reactive([{
             text: "Ось XY",
-            selected: false
+            selected: false,
+            value: "xy"
         },{
             text: "Ось XZ",
-            selected: false
+            selected: false,
+            value: "xz"
         },{
             text: "Ось YZ",
-            selected: false
+            selected: false,
+            value: "yz"
         }])
+        const store = useStore();
+        let selectedValue = null;
 
         const checkboxHandler = (i) => {
             checkboxes.forEach((item) => item.selected = false)
             checkboxes[i].selected = true
+            selectedValue = checkboxes[i].value
         }
 
         const submitHandler = () => {
-            console.log("submitHandler");
+            if (selectedValue !== null) {
+                store.dispatch("panel/coordinateAxesSubmit", selectedValue)
+            }
         }
 
         const canSubmit = computed(() =>

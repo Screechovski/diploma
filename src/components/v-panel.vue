@@ -56,7 +56,7 @@ export default {
 .panel
     padding: 15px
     border-radius: 3px
-    background-color: $backgroud-light
+    background-color: $backgroud
     display: flex
     gap: 7px
 </style>

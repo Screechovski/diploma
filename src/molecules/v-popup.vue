@@ -62,7 +62,7 @@ export default {
         min-width: 400px
         max-width: 900px
         padding: 15px
-        background-color: $backgroud-light
+        background-color: $backgroud
         box-shadow: 0px 0px 20px $backgroud-dark
     &__header
         color: $button-color

@@ -114,34 +114,32 @@ export default class Modeller {
 
     constructor(element){
         const { clientWidth: width, clientHeight: height } = element;
-        this.element = element;
+
         this.rayCaster = new THREE.Raycaster();
 
-        this.element.addEventListener("mousedown", this.onMouseDown)
-
         this.scene = new THREE.Scene()
-        this.scene.add(new THREE.AxesHelper(5))
         this.scene.background = new THREE.Color( 0x0e0e0e );
 
-        this.camera = new THREE.PerspectiveCamera(
-            75,
-            width / height,
-            0.1,
-            1000
-        )
-        this.camera.position.z = 3
+        this.camera = new THREE.OrthographicCamera( -3, 3, 3, -3, -1000, 2000);
+        this.camera.position.y = 1
 
         this.renderer = new THREE.WebGLRenderer()
         this.renderer.setSize(width, height)
+
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+        this.controls.enabled = false
+
         element.appendChild(this.renderer.domElement)
-        this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement)
-        this.orbitControls.enabled = false
+
+        this.addAxesHelper()
+        this.addPlane()
+        this.addSphere()
+
         this.animate()
     }
 
     enableOrbitControls = (flag = false) => {
-        console.log("enableOrbitControls", flag);
-        this.orbitControls.enabled = flag
+        this.controls.enabled = flag
     }
 
     animate = () => {
@@ -152,29 +150,59 @@ export default class Modeller {
         // stats.update()
     }
 
-    render = (a) => {
+    render = () => {
         this.renderer.render(this.scene, this.camera)
+    }
+
+    addAxesHelper = () => {
+        const axesHelper = new THREE.AxesHelper(5)
+
+        axesHelper.name = "Оси координат"
+
+        this.scene.add(axesHelper)
     }
 
     addSphere = () => {
         const sphereGeometry = new THREE.SphereGeometry()
-        const material = new THREE.MeshNormalMaterial()
-        const sphere = new THREE.Mesh(sphereGeometry, material)
+        const sphereMaterial = new THREE.MeshNormalMaterial()
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+
+        sphere.name = "Круг"
         sphere.position.x = 3
+
         this.scene.add(sphere)
     }
 
+    addPlane = () => {
+        const planeGeometry = new THREE.PlaneGeometry( 1, 1 );
+        const planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+        const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+        plane.name = "Квадрат"
+
+        this.scene.add( plane );
+    }
+
     getPosition = (event) => {
-        const offset = this.element.getBoundingClientRect();
+        const offset = this.renderer.domElement.getBoundingClientRect();
         const position = {
-            x: ((event.clientX - offset.left) / this.element.clientWidth) * 2 - 1,
-            y: -((event.clientY - offset.top) / this.element.clientHeight) * 2 + 1
+            x: ((event.clientX - offset.left) / this.renderer.domElement.clientWidth) * 2 - 1,
+            y: -((event.clientY - offset.top) / this.renderer.domElement.clientHeight) * 2 + 1
         };
         this.rayCaster.setFromCamera(position, this.camera);
         const intersects = this.rayCaster.intersectObjects(this.scene.children, true);
         if (intersects.length > 0) {
             return intersects[0].point;
         }
+    }
+
+    setCamera = (key) => {
+        console.log(this.camera);
+        console.log(this.controls);
+        ['x','y','z'].forEach((coordinate)=>{
+            this.camera.position[coordinate] = !key.includes(coordinate) ? 3 : 0;
+        })
+        this.controls.update();
     }
 
     onMouseDown = (e) => {

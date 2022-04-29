@@ -18,8 +18,10 @@ export default {
     actions: {
         setRef: (context, ref = null) => {
             if (ref) {
+                let a = new Modeller(ref);
+                window.modeller = a;
                 context.commit('setRef', ref);
-                context.commit('setInstance', new Modeller(ref));
+                context.commit('setInstance', a);
             }
         },
         updateRender: (context) => {
@@ -33,6 +35,13 @@ export default {
         },
         enableReview: (context, flag) => {
             context.state.instance.enableOrbitControls(flag);
+        },
+        setCoordinates: (context, coordinates) => {
+            context.state.instance.setCamera(coordinates);
+        },
+        getChildrens: async (context) => {
+            const childrens = await context.state.instance.scene.children;
+            return Object.values(childrens);
         }
     }
 }
