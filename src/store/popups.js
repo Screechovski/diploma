@@ -5,10 +5,12 @@ export default {
     state:() => ({
         coordinateAxes: false,
         rectangleParams: false,
+        axesHelperPostion: false,
     }),
     getters: defaultGettersObject([
         "coordinateAxes",
-        "rectangleParams"
+        "rectangleParams",
+        "axesHelperPostion"
     ]),
     mutations: {
         showPopup: (state, key) => {

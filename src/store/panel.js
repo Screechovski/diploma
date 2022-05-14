@@ -6,11 +6,13 @@ export default {
         coordinateAxes: false,
         review: false,
         square: false,
+        addCoordinates: false,
     }),
     getters: defaultGettersObject([
         "coordinateAxes",
         "review",
-        "square"
+        "square",
+        "addCoordinates"
     ]),
     mutations: {
         toggleReview: defaultMutation("review")
@@ -38,6 +40,9 @@ export default {
         squareSubmit: (context, value) => {
             context.dispatch("popups/hidePopup", "rectangleParams", {root: true});
             context.dispatch('modeller/drawSquare', value, {root: true})
+        },
+        addCoordinateClick: (context) => {
+            context.dispatch("popups/showPopup", "axesHelperPostion", {root: true});
         },
     }
 }

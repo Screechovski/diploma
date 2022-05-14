@@ -4,6 +4,7 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { GUI } from 'dat.gui'
 
 let squareCounter = 1;
+let axesCounter = 1;
 
 export default class Modeller {
     scene;
@@ -53,13 +54,20 @@ export default class Modeller {
         this.renderer.render(this.scene, this.camera)
     }
 
-    addAxesHelper = () => {
-        const axesHelper = new THREE.AxesHelper(5)
-
-        axesHelper.name = "Оси координат"
-
-        this.scene.add(axesHelper)
-    }
+    addAxesHelper = (x = 0, y = 0, z = 0) => new Promise((resolve, reject) => {
+        try {
+            const axesHelper = new THREE.AxesHelper(5);
+            axesHelper.name = "Оси координат " + axesCounter;
+            axesHelper.position.x = x;
+            axesHelper.position.y = y;
+            axesHelper.position.z = z;
+            axesCounter++;
+            this.scene.add(axesHelper);
+            resolve();
+        } catch (error) {
+            reject(error);
+        }
+    })
 
     addSphere = () => {
         /*const sphereGeometry = new THREE.SphereGeometry()
@@ -77,9 +85,9 @@ export default class Modeller {
         const squareMaterial = new THREE.MeshBasicMaterial( {color: 0x6c6c6c} );
         const square = new THREE.Mesh( squareGeometry, squareMaterial );
 
-        square.position.x = width / 2 - startX;
-        square.position.y = height / 2 - startY;
-        square.position.z = length / 2 - startZ;
+        square.position.x = +startX + width / 2;
+        square.position.y = +startY + height / 2;
+        square.position.z = +startZ + length / 2;
         square.name = "Прямоугольник " + squareCounter;
         squareCounter++;
 
@@ -112,15 +120,33 @@ export default class Modeller {
     setCamera = (key) => {
         console.log(this.camera);
         console.log(this.controls);
-        ['x','y','z'].forEach((coordinate)=>{
+        (['x','y','z']).forEach((coordinate)=>{
             this.camera.position[coordinate] = !key.includes(coordinate) ? 3 : 0;
         })
         this.controls.update();
     }
 
-    removeObject = (id) => {
-        this.scene.remove(this.scene.children[id])
-    }
+    removeObject = (id) => new Promise((resolve, reject) => {
+        try {
+            if (!this.scene.children[id]) {
+                reject("Children is undefined")
+            } else {
+                const cleanObjectName = this.scene.children[id].name.replace(/[^а-я]/gi, "").toLocaleLowerCase();
+                switch (cleanObjectName) {
+                    case "осикоординат":
+                        axesCounter--
+                        break;
+                    case "прямоугольник":
+                        squareCounter--
+                        break;
+                }
+                this.scene.remove(this.scene.children[id])
+                resolve();
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
 
     onMouseDown = (e) => {
         /*const position = this.getPosition(e);

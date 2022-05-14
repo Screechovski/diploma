@@ -5,7 +5,10 @@ export default {
     state: () => ({
         treeList: []
     }),
-    getters: defaultGettersObject(["treeList"]),
+    getters: {
+        ...defaultGettersObject(["treeList"]),
+        treeisEmpty: state => state.treeList.length === 0
+    },
     mutations: {
         setTreeList: defaultMutation('treeList'),
     },
@@ -14,8 +17,13 @@ export default {
             const treeItems = await context.dispatch("modeller/getChildrens", null, {root: true});
             context.commit("setTreeList", treeItems)
         },
-        removeItem: (context, id) => {
-            console.log(id);
+        removeItem: async (context, id) => {
+            await context.dispatch("modeller/removeChildren", id, {root: true});
+            context.dispatch("getTree")
+        },
+        addCoordinates: async (context) => {
+            await context.dispatch("modeller/addCoordinates", null, {root: true});
+            context.dispatch("getTree")
         }
     }
 }

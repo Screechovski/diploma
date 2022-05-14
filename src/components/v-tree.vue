@@ -2,11 +2,22 @@
 
 section(:class="cssClass", class="tree")
     ul.tree__list
-        li.tree__item.tree-item(v-for="item in items")
+        li.tree__item.tree-add-coordinates(v-if="treeisEmpty")
+            v-button(
+                cssClass="tree-add-coordinates",
+                text="Добавить ось координат",
+                @press="addCoordinates"
+            )
+        li.tree__item.tree-item(v-for="item, id in items", v-else)
             p.tree-item__name Имя: {{ item.name ? item.name : "-" }}
             p.tree-item__type Тип: {{ item.type }}
-            button.tree-item__delete
-                s-trash
+            .tree-item__button-row
+                button.tree-item__button.tree-item__delete(@click="removeTreeItem(id)")
+                    s-trash
+                button.tree-item__button.tree-item__edit(@click="() => {}")
+                    s-edit
+                button.tree-item__button.tree-item__visible(@click="() => {}")
+                    s-eye
 
 </template>
 
@@ -15,9 +26,12 @@ import { cssClass } from "@/assets/helper"
 import { useStore } from "vuex"
 import { onMounted, computed } from "vue"
 import STrash from "@/svg/s-trash"
+import SEye from "@/svg/s-eye"
+import SEdit from "@/svg/s-edit"
+import VButton from "@/molecules/v-button"
 
 export default {
-    components: { STrash },
+    components: { STrash, VButton, SEye, SEdit },
     props: { cssClass },
     setup(){
         const store = useStore();
@@ -25,12 +39,20 @@ export default {
             store.dispatch("tree/getTree")
         })
 
+        const removeTreeItem = (id) =>
+            store.dispatch("tree/removeItem", id);
+
         const items = computed(() =>
             store.getters["tree/treeList"])
 
-        console.log(items);
+        const treeisEmpty = computed(() =>
+            store.getters["tree/treeisEmpty"])
 
-        return { items }
+        const addCoordinates = () =>
+            store.dispatch("popups/showPopup", "axesHelperPostion");
+
+
+        return { items, removeTreeItem, treeisEmpty, addCoordinates }
     }
 }
 </script>
@@ -50,9 +72,8 @@ export default {
 .tree-item
     padding: 7px
     color: $button-color
-    display: grid
-    grid-template-columns: 1fr 21px
-    grid-template-areas: "name delete" "type delete"
+    display: flex
+    flex-direction: column
     border: 2px solid $backgroud-light
     background-color: $backgroud
     gap: 5px
@@ -64,6 +85,11 @@ export default {
         font-size: 12px
     &__delete
         grid-area: delete
+    &__edit
+        grid-area: edit
+    &__visible
+        grid-area: visible
+    &__button
         height: 21px
         width: 21px
         color: $button-color-dark
@@ -83,5 +109,9 @@ export default {
             border-color: $button-color
             .svg
                 fill: $button-color
+    &__button-row
+        display: flex
+        gap: 5px
+
 
 </style>

@@ -39,10 +39,19 @@ export default {
         setCoordinates: (context, coordinates) => {
             context.state.instance.setCamera(coordinates);
         },
+        /* Childrens */
         getChildrens: async (context) => {
             const childrens = await context.state.instance.scene.children;
             return Object.values(childrens);
         },
+        removeChildren: async (context, id) => {
+            return context.state.instance.removeObject(id);
+        },
+        /* Add coordinates */
+        addCoordinates: (context, position) => {
+            return context.state.instance.addAxesHelper(...position);
+        },
+        /* Drawing */
         drawSquare: (context, squareData) => {
             context.state.instance.addSquare(squareData);
             context.dispatch("tree/getTree", null, {root:true})

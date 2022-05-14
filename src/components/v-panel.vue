@@ -17,6 +17,11 @@ section.panel(:class="cssClass")
         @onClick="coordinateAxesClick"
     )
         s-coordinate-axes
+    v-panel-button(
+        text="Добавить оси"
+        @onClick="coordinatesClick"
+    )
+        s-coordinate-axes
 
 </template>
 
@@ -53,11 +58,15 @@ export default {
         const squareClick = () =>
             store.dispatch("panel/squareClick");
 
+        const coordinatesClick = () =>
+            store.dispatch("panel/addCoordinateClick");
+
         return {
             coordinateAxesClick,
             reviewActive,
             reviewClick,
-            squareClick
+            squareClick,
+            coordinatesClick
         }
     }
 }
