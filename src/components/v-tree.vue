@@ -12,12 +12,16 @@ section(:class="cssClass", class="tree")
             p.tree-item__name Имя: {{ item.name ? item.name : "-" }}
             p.tree-item__type Тип: {{ item.type }}
             .tree-item__button-row
-                button.tree-item__button.tree-item__delete(@click="removeTreeItem(id)")
+                button.tree-item__button(@click="removeTreeItem(id)")
                     s-trash
-                button.tree-item__button.tree-item__edit(@click="() => {}")
+                button.tree-item__button(@click="() => {}")
                     s-edit
-                button.tree-item__button.tree-item__visible(@click="() => {}")
-                    s-eye
+                button.tree-item__button(@click="toggleVisible(id)")
+                    s-eye(v-if="item.visible")
+                    s-eye-crossed(v-else)
+                button.tree-item__button(@click="toggleWireframe(id)", v-if="item.wireframe !== null")
+                    s-square(v-if="item.wireframe")
+                    s-square-filled(v-else)
 
 </template>
 
@@ -27,32 +31,53 @@ import { useStore } from "vuex"
 import { onMounted, computed } from "vue"
 import STrash from "@/svg/s-trash"
 import SEye from "@/svg/s-eye"
+import SEyeCrossed from "@/svg/s-eye-crossed"
 import SEdit from "@/svg/s-edit"
+import SSquare from "@/svg/s-square"
+import SSquareFilled from "@/svg/s-square-filled"
 import VButton from "@/molecules/v-button"
 
 export default {
-    components: { STrash, VButton, SEye, SEdit },
+    components: {
+        STrash,
+        VButton,
+        SEye,
+        SEdit,
+        SEyeCrossed,
+        SSquare,
+        SSquareFilled
+    },
     props: { cssClass },
     setup(){
         const store = useStore();
-        onMounted(() => {
-            store.dispatch("tree/getTree")
-        })
+        onMounted(() =>
+            store.dispatch("tree/getTree"))
 
         const removeTreeItem = (id) =>
             store.dispatch("tree/removeItem", id);
 
         const items = computed(() =>
             store.getters["tree/treeList"])
-
         const treeisEmpty = computed(() =>
             store.getters["tree/treeisEmpty"])
 
         const addCoordinates = () =>
             store.dispatch("popups/showPopup", "axesHelperPostion");
 
+        const toggleVisible = (id) =>
+            store.dispatch("tree/toggleVisible", id);
 
-        return { items, removeTreeItem, treeisEmpty, addCoordinates }
+        const toggleWireframe = (id) =>
+            store.dispatch("tree/toggleWireframe", id)
+
+        return {
+            items,
+            removeTreeItem,
+            treeisEmpty,
+            addCoordinates,
+            toggleVisible,
+            toggleWireframe
+        }
     }
 }
 </script>

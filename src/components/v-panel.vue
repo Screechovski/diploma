@@ -2,10 +2,20 @@
 
 section.panel(:class="cssClass")
     v-panel-button(
-        text="Квадрат"
+        text="Куб"
         @onClick="squareClick"
     )
-        s-square
+        s-cube
+    v-panel-button(
+        text="Цилиндр"
+        @onClick="cylinderClick"
+    )
+        s-cylinder
+    v-panel-button(
+        text="Шар"
+        @onClick="sphereClick"
+    )
+        s-sphere
     v-panel-button(
         text="Обзор"
         :active="reviewActive"
@@ -23,6 +33,8 @@ section.panel(:class="cssClass")
     )
         s-coordinate-axes
 
+
+
 </template>
 
 <script>
@@ -30,9 +42,11 @@ import { useStore } from 'vuex'
 import { computed } from 'vue'
 import { cssClass } from "@/assets/helper"
 import VPanelButton from '@/molecules/v-panel-button'
-import SSquare from '@/svg/s-squre'
+import SCube from '@/svg/s-cube'
 import SCameraRotate from '@/svg/s-camera-rotate'
 import SCoordinateAxes from '@/svg/s-coordinate-axes'
+import SCylinder from '@/svg/s-cylinder'
+import SSphere from '@/svg/s-sphere'
 
 export default {
     props: {
@@ -40,9 +54,11 @@ export default {
     },
     components: {
         VPanelButton,
-        SSquare,
+        SCube,
         SCameraRotate,
-        SCoordinateAxes
+        SCoordinateAxes,
+        SCylinder,
+        SSphere
     },
     setup(){
         const store = useStore();
@@ -58,6 +74,12 @@ export default {
         const squareClick = () =>
             store.dispatch("panel/squareClick");
 
+        const sphereClick = () =>
+            store.dispatch("panel/sphereClick")
+
+        const cylinderClick = () =>
+            store.dispatch("panel/cylinderClick")
+
         const coordinatesClick = () =>
             store.dispatch("panel/addCoordinateClick");
 
@@ -66,7 +88,9 @@ export default {
             reviewActive,
             reviewClick,
             squareClick,
-            coordinatesClick
+            coordinatesClick,
+            sphereClick,
+            cylinderClick
         }
     }
 }
@@ -79,6 +103,7 @@ export default {
     padding: 15px
     border-radius: 3px
     background-color: $backgroud
-    display: flex
+    display: grid
+    grid-template-columns: repeat(8, 120px)
     gap: 7px
 </style>

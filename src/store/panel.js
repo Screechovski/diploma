@@ -4,7 +4,7 @@ export default {
     namespaced: true,
     state: () => ({
         coordinateAxes: false,
-        review: false,
+        review: true,
         square: false,
         addCoordinates: false,
     }),
@@ -39,10 +39,28 @@ export default {
         },
         squareSubmit: (context, value) => {
             context.dispatch("popups/hidePopup", "rectangleParams", {root: true});
-            context.dispatch('modeller/drawSquare', value, {root: true})
+            context.dispatch("modeller/drawSquare", value, {root: true})
+            context.dispatch("tree/getTree", null, {root:true})
         },
         addCoordinateClick: (context) => {
             context.dispatch("popups/showPopup", "axesHelperPostion", {root: true});
         },
+        sphereClick: (context) => {
+            context.dispatch("popups/showPopup", "sphereParams", {root: true});
+        },
+        sphereSubmit: (context, value) => {
+            context.dispatch("popups/hidePopup", "sphereParams", {root: true});
+            context.dispatch("modeller/drawSphere", value, {root: true})
+            context.dispatch("tree/getTree", null, {root:true})
+        },
+        cylinderClick: (context) => {
+            context.dispatch("popups/showPopup", "cylinderParams", {root: true});
+        },
+        cylinderSubmit: (context, value) => {
+            console.log(value);
+            context.dispatch("popups/hidePopup", "cylinderParams", {root: true});
+            context.dispatch('modeller/drawCylinder', value, {root: true})
+            context.dispatch("tree/getTree", null, {root:true})
+        }
     }
 }

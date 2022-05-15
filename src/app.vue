@@ -3,7 +3,9 @@
 v-main
 v-popup-coordinate-axes(v-if="showCoordinateAxes")
 v-popup-rectangle(v-if="showRectangleParams")
+v-popup-sphere(v-if="showSphereParams")
 v-popup-axeshelper-postion(v-if="showAxesHelperPostion")
+v-popup-cylinder(v-if="showCylinderParams")
 
 </template>
 
@@ -14,20 +16,30 @@ import VMain from "@/pages/v-main"
 import VPopupCoordinateAxes from "@/components/v-popup-coordinate-axes"
 import VPopupRectangle from "@/components/v-popup-rectangle"
 import VPopupAxeshelperPostion from "@/components/v-popup-axeshelper-postion"
-
+import VPopupSphere from "@/components/v-popup-sphere"
+import VPopupCylinder from "@/components/v-popup-cylinder"
 
 export default {
     components: {
         VMain,
         VPopupCoordinateAxes,
         VPopupRectangle,
-        VPopupAxeshelperPostion
+        VPopupAxeshelperPostion,
+        VPopupSphere,
+        VPopupCylinder
     },
     setup(){
         const store = useStore();
-        const showCoordinateAxes = computed(() => store.getters["popups/coordinateAxes"])
-        const showAxesHelperPostion = computed(() => store.getters["popups/axesHelperPostion"])
-        const showRectangleParams = computed(() => store.getters["popups/rectangleParams"])
+        const showCoordinateAxes = computed(() =>
+            store.getters["popups/coordinateAxes"])
+        const showAxesHelperPostion = computed(() =>
+            store.getters["popups/axesHelperPostion"])
+        const showRectangleParams = computed(() =>
+            store.getters["popups/rectangleParams"])
+        const showSphereParams = computed(() =>
+            store.getters["popups/sphereParams"])
+        const showCylinderParams = computed(() =>
+            store.getters["popups/cylinderParams"])
 
         const updateRender = () =>
             store.dispatch("modeller/updateRender");
@@ -40,7 +52,9 @@ export default {
         return {
             showCoordinateAxes,
             showRectangleParams,
-            showAxesHelperPostion
+            showAxesHelperPostion,
+            showSphereParams,
+            showCylinderParams
         }
     }
 }

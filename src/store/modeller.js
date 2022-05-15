@@ -41,8 +41,12 @@ export default {
         },
         /* Childrens */
         getChildrens: async (context) => {
-            const childrens = await context.state.instance.scene.children;
-            return Object.values(childrens);
+            const childrensObject = await context.state.instance.scene.children;
+            const childrensArray = Object.values(childrensObject)
+            const cleanChildrensArray = childrensArray.map(({name, type, visible, material: { wireframe = null }}) =>
+                ({name, type, visible, wireframe}));
+
+            return cleanChildrensArray;
         },
         removeChildren: async (context, id) => {
             return context.state.instance.removeObject(id);
@@ -54,7 +58,20 @@ export default {
         /* Drawing */
         drawSquare: (context, squareData) => {
             context.state.instance.addSquare(squareData);
-            context.dispatch("tree/getTree", null, {root:true})
-        }
+        },
+        /* Toggle visible */
+        toggleVisible: async (context, id) => {
+            await context.state.instance.toggleVisible(id);
+        },
+        /* Toggle wireframe */
+        toggleWireframe: async (context, id) => {
+            await context.state.instance.toggleWireframe(id);
+        },
+        drawSphere: (context, sphereData) => {
+            context.state.instance.addSphere(sphereData);
+        },
+        drawCylinder: (context, cylinderData) => {
+            context.state.instance.addCylinder(cylinderData);
+        },
     }
 }

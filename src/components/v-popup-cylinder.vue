@@ -1,7 +1,7 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-rectangle" pKey="rectangleParams")
-    template(#header="") Параметры куба
+v-popup(cssClass="v-popup-rectangle" pKey="cylinderParams")
+    template(#header="") Параметры шара
     template(#content="")
         .v-popup-rectangle__inner
             v-field(
@@ -44,18 +44,6 @@ export default {
                 title: "Старт X",
                 valid: null,
             },
-            width: {
-                id: "width",
-                value: "",
-                title: "Ширина",
-                valid: null,
-            },
-            startY: {
-                id: "startY",
-                value: "",
-                title: "Старт Y",
-                valid: null,
-            },
             height: {
                 id: "height",
                 value: "",
@@ -68,12 +56,18 @@ export default {
                 title: "Старт Z",
                 valid: null,
             },
-            length: {
-                id: "length",
+            radius: {
+                id: "radius",
                 value: "",
-                title: "Длина",
+                title: "Радиус",
                 valid: null,
-            }
+            },
+            startY: {
+                id: "startY",
+                value: "",
+                title: "Старт Y",
+                valid: null,
+            },
         })
 
         const fields = computed(() =>
@@ -89,10 +83,10 @@ export default {
 
         const submit = () => {
             const cleanValues = {};
-            fields.value.forEach(i => {
-                cleanValues[i.id] = i.value;
-            })
-            store.dispatch("panel/squareSubmit", cleanValues)
+            Object.values(fieldsObject).forEach(item =>
+                cleanValues[item.id] = item.value)
+
+            store.dispatch("panel/cylinderSubmit", cleanValues)
         }
 
         return {

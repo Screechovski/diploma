@@ -1,7 +1,7 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-rectangle" pKey="rectangleParams")
-    template(#header="") Параметры куба
+v-popup(cssClass="v-popup-rectangle" pKey="sphereParams")
+    template(#header="") Параметры шара
     template(#content="")
         .v-popup-rectangle__inner
             v-field(
@@ -38,16 +38,16 @@ export default {
     setup(){
         const store = useStore();
         const fieldsObject = reactive({
+            radius: {
+                id: "radius",
+                value: "",
+                title: "Радиус",
+                valid: null,
+            },
             startX: {
                 id: "startX",
                 value: "",
                 title: "Старт X",
-                valid: null,
-            },
-            width: {
-                id: "width",
-                value: "",
-                title: "Ширина",
                 valid: null,
             },
             startY: {
@@ -56,24 +56,12 @@ export default {
                 title: "Старт Y",
                 valid: null,
             },
-            height: {
-                id: "height",
-                value: "",
-                title: "Высота",
-                valid: null,
-            },
             startZ: {
                 id: "startZ",
                 value: "",
                 title: "Старт Z",
                 valid: null,
             },
-            length: {
-                id: "length",
-                value: "",
-                title: "Длина",
-                valid: null,
-            }
         })
 
         const fields = computed(() =>
@@ -89,10 +77,10 @@ export default {
 
         const submit = () => {
             const cleanValues = {};
-            fields.value.forEach(i => {
-                cleanValues[i.id] = i.value;
-            })
-            store.dispatch("panel/squareSubmit", cleanValues)
+            Object.values(fieldsObject).forEach(item =>
+                cleanValues[item.id] = item.value)
+
+            store.dispatch("panel/sphereSubmit", cleanValues)
         }
 
         return {

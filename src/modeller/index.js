@@ -5,6 +5,8 @@ import { GUI } from 'dat.gui'
 
 let squareCounter = 1;
 let axesCounter = 1;
+let sphereCounter = 1;
+let cylinderCounter = 1;
 
 export default class Modeller {
     scene;
@@ -29,7 +31,11 @@ export default class Modeller {
         this.renderer.setSize(width, height)
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-        this.controls.enabled = false
+        console.log(this.controls);
+        //this.controls.enabled = false
+
+        this.segments = 50
+        this.radiusSegmentsK = 7
 
         element.appendChild(this.renderer.domElement)
 
@@ -69,18 +75,8 @@ export default class Modeller {
         }
     })
 
-    addSphere = () => {
-        /*const sphereGeometry = new THREE.SphereGeometry()
-        const sphereMaterial = new THREE.MeshNormalMaterial()
-        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
-
-        sphere.name = "Круг"
-        sphere.position.x = 3
-
-        this.scene.add(sphere)*/
-    }
-
-    addSquare = ({width, height, length, startX, startY, startZ}) => {
+    addSquare = (data) => {
+        const {width, height, length, startX, startY, startZ} = data;
         const squareGeometry = new THREE.BoxGeometry( width, height, length );
         const squareMaterial = new THREE.MeshBasicMaterial( {color: 0x6c6c6c} );
         const square = new THREE.Mesh( squareGeometry, squareMaterial );
@@ -92,6 +88,45 @@ export default class Modeller {
         squareCounter++;
 
         this.scene.add( square );
+    }
+
+    addCylinder = (data) => {
+        const { startX, height, startZ, radius, startY } = data;
+        const cylinderGeometry = new THREE.CylinderGeometry( radius, radius, height, 50 );
+        const cylinderMaterial = new THREE.MeshBasicMaterial( {color: 0x6c6c6c} );
+        const cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+
+        cylinder.position.x = +startX + radius;
+        cylinder.position.y = +startY + height / 2;
+        cylinder.position.z = +startZ + radius;
+        cylinder.name = "Цилиндр " + squareCounter;
+        cylinderCounter++;
+
+        this.scene.add( cylinder );
+    }
+
+    addSphere = (data) => {
+        const {
+            radius,
+            startX,
+            startY,
+            startZ
+        } = data;
+        const sphereGeometry = new THREE.SphereGeometry(
+            radius,
+            5 * this.radiusSegmentsK,
+            radius * this.radiusSegmentsK
+        );
+        const sphereMaterial = new THREE.MeshBasicMaterial( { color: 0x6c6c6c } );
+        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+
+        sphere.position.x = +startX + radius;
+        sphere.position.y = +startY + radius;
+        sphere.position.z = +startZ + radius;
+        sphere.name = "Круг " + squareCounter;
+        sphereCounter++;
+
+        this.scene.add( sphere );
     }
 
     addPlane = () => {
@@ -118,8 +153,6 @@ export default class Modeller {
     }
 
     setCamera = (key) => {
-        console.log(this.camera);
-        console.log(this.controls);
         (['x','y','z']).forEach((coordinate)=>{
             this.camera.position[coordinate] = !key.includes(coordinate) ? 3 : 0;
         })
@@ -132,6 +165,7 @@ export default class Modeller {
                 reject("Children is undefined")
             } else {
                 const cleanObjectName = this.scene.children[id].name.replace(/[^а-я]/gi, "").toLocaleLowerCase();
+                console.log(cleanObjectName);
                 switch (cleanObjectName) {
                     case "осикоординат":
                         axesCounter--
@@ -162,4 +196,32 @@ export default class Modeller {
         // scene.children[1].position.set(relative.x + vertexSize, relative.y, relative.z);
         // controls.enabled = false;
     }
+
+    toggleVisible = (id) => new Promise((resolve, reject) => {
+        try {
+            if (!this.scene.children[id]) {
+                reject("Children is undefined")
+            } else {
+                const visible = this.scene.children[id].visible;
+                this.scene.children[id].visible = !visible;
+                resolve();
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+
+    toggleWireframe = (id) => new Promise((resolve, reject) => {
+        const wireframe = this.scene.children[id].material.wireframe ?? null;
+        try {
+            if (wireframe === null) {
+                reject("Wireframe is undefined")
+            } else {
+                this.scene.children[id].material.wireframe = !wireframe
+                resolve();
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
 }

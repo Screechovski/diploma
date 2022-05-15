@@ -6,11 +6,15 @@ export default {
         coordinateAxes: false,
         rectangleParams: false,
         axesHelperPostion: false,
+        sphereParams: false,
+        cylinderParams: false,
     }),
     getters: defaultGettersObject([
         "coordinateAxes",
         "rectangleParams",
-        "axesHelperPostion"
+        "axesHelperPostion",
+        "sphereParams",
+        "cylinderParams"
     ]),
     mutations: {
         showPopup: (state, key) => {

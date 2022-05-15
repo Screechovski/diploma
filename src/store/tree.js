@@ -24,6 +24,14 @@ export default {
         addCoordinates: async (context) => {
             await context.dispatch("modeller/addCoordinates", null, {root: true});
             context.dispatch("getTree")
+        },
+        toggleVisible: (context, id) => {
+            context.dispatch("modeller/toggleVisible", id, {root: true});
+            context.dispatch("getTree")
+        },
+        toggleWireframe: (context, id) => {
+            context.dispatch("modeller/toggleWireframe", id, {root: true});
+            context.dispatch("getTree")
         }
     }
 }
