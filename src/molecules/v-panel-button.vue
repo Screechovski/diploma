@@ -4,7 +4,7 @@ button(
     type="button",
     class="panel-button"
     @click="clickHandler"
-    :class="{active}"
+    :class="{active, [cssClass]: true}"
 )
     i(class="panel-button__icon")
         slot
@@ -13,6 +13,8 @@ button(
 </template>
 
 <script>
+import {cssClass} from "@/assets/helper";
+
 export default {
     props:{
         text: {
@@ -22,7 +24,8 @@ export default {
         active: {
             type: Boolean,
             default: false
-        }
+        },
+        cssClass
     },
     setup(popups, {emit}){
         const clickHandler = () => {

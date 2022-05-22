@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { GUI } from 'dat.gui'
+import { Vector3 } from 'three';
 
 let squareCounter = 1;
 let axesCounter = 1;
@@ -25,14 +26,29 @@ export default class Modeller {
         this.scene.background = new THREE.Color( 0x0e0e0e );
 
         this.camera = new THREE.OrthographicCamera( width / -200, width / 200, height / 200, height / -200, -1000, 1000 );
-        this.camera.position.y = 3
+        this.camera.position.y = 6
 
         this.renderer = new THREE.WebGLRenderer()
         this.renderer.setSize(width, height)
 
+        this.selectedAxes = {
+            x: false,
+            y: true,
+            z: false,
+        }
+
+        this.dotsArray = [[0,0,0]]
+
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-        console.log(this.controls);
-        //this.controls.enabled = false
+
+        this.controls.enabled = false
+        this.controls.enableZoom = false
+
+        this.controls.addEventListener("start", () => this.selectedAxes = {
+            x: false,
+            y: false,
+            z: false,
+        })
 
         this.segments = 50
         this.radiusSegmentsK = 7
@@ -53,7 +69,7 @@ export default class Modeller {
 
         this.render()
 
-        // stats.update()
+        // this.stats.update()
     }
 
     render = () => {
@@ -99,7 +115,7 @@ export default class Modeller {
         cylinder.position.x = +startX + radius;
         cylinder.position.y = +startY + height / 2;
         cylinder.position.z = +startZ + radius;
-        cylinder.name = "Цилиндр " + squareCounter;
+        cylinder.name = "Цилиндр " + cylinderCounter;
         cylinderCounter++;
 
         this.scene.add( cylinder );
@@ -123,20 +139,20 @@ export default class Modeller {
         sphere.position.x = +startX + radius;
         sphere.position.y = +startY + radius;
         sphere.position.z = +startZ + radius;
-        sphere.name = "Круг " + squareCounter;
+        sphere.name = "Круг " + sphereCounter;
         sphereCounter++;
 
         this.scene.add( sphere );
     }
 
     addPlane = () => {
-        /*const planeGeometry = new THREE.PlaneGeometry( 1, 1 );
-        const planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-        const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+        const size = 1000;
+        const divisions = 1000;
+        const gridHelper = new THREE.GridHelper( size, divisions );
 
-        plane.name = "Квадрат"
+        gridHelper.name = "Сетка";
 
-        this.scene.add( plane );*/
+        this.scene.add( gridHelper );
     }
 
     getPosition = (event) => {
@@ -147,16 +163,93 @@ export default class Modeller {
         };
         this.rayCaster.setFromCamera(position, this.camera);
         const intersects = this.rayCaster.intersectObjects(this.scene.children, true);
+        console.log(intersects);
         if (intersects.length > 0) {
             return intersects[0].point;
         }
     }
 
+    getPositionV2 = (event) => {
+        const vec = new THREE.Vector3(); // create once and reuse
+        const pos = new THREE.Vector3(); // create once and reuse
+
+        vec.set(
+            ( event.clientX / window.innerWidth ) * 2 - 1,
+            - ( event.clientY / window.innerHeight ) * 2 + 1,
+            0.5 );
+
+        vec.unproject( camera );
+
+        vec.sub( camera.position ).normalize();
+
+        const distance = - camera.position.z / vec.z;
+
+        pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
+    }
+
+    getPositionV3 = (event) => {
+        const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const mv = new THREE.Vector3(
+            (event.clientX / window.innerWidth) * 2 - 1,
+            -(event.clientY / window.innerHeight) * 2 + 1,
+            0.5 );
+        const raycaster = projector.pickingRay(mv, camera);
+        const pos = raycaster.ray.intersectPlane(planeZ);
+        return "x: " + pos.x + ", y: " + pos.y;
+    }
+
+    getNativePosition = (e) => {
+        let vector = new THREE.Vector3();
+        const { domElement } = this.renderer;
+        const { top, left } = domElement.getBoundingClientRect();
+
+        if (Object.values(this.selectedAxes).every(i => !i)) {
+            return null;
+        }
+
+        vector.set(((e.clientX - top) / domElement.offsetWidth) * 2 - 1, -((e.clientY - left) / domElement.offsetHeight) * 2 + 1,0);
+        vector.unproject(this.camera);
+
+        return {
+            x: this.selectedAxes.x ? 0 : vector.x - 1,
+            y: this.selectedAxes.y ? 0 : vector.y - 1,
+            z: this.selectedAxes.z ? 0 : vector.z + 1,
+        }
+    }
+
+
+    posc_c470 = (x = 0, y = 0, z = 0) => {
+        const axesHelper = new THREE.AxesHelper(0.2);
+        axesHelper.position.x = x;
+        axesHelper.position.y = y;
+        axesHelper.position.z = z;
+        this.scene.add(axesHelper);
+        return axesHelper;
+    }
+
+    curPos_18291f = (data) => {
+        if (!this.has && data !== null) {
+            return this.has = this.posc_c470(data.x, data.y, data.z);
+        }
+        if (this.has && data !== null) {
+            this.has.position.x = data.x;
+            this.has.position.y = data.y;
+            this.has.position.z = data.z;
+        }
+    }
+
+    mouseMove = (e) => {
+        this.curPos_18291f(this.getNativePosition(e));
+    }
+
     setCamera = (key) => {
-        (['x','y','z']).forEach((coordinate)=>{
-            this.camera.position[coordinate] = !key.includes(coordinate) ? 3 : 0;
+        (['x','y','z']).forEach((coordinate) => {
+            const temp = !key.includes(coordinate);
+            this.camera.position[coordinate] = temp ? 1 : 0;
+            this.selectedAxes[coordinate] = temp;
         })
-        this.controls.update();
+        this.camera.lookAt(new Vector3(0, 0, 0))
+        // this.controls.update();
     }
 
     removeObject = (id) => new Promise((resolve, reject) => {

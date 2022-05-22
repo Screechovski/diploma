@@ -1,37 +1,50 @@
 <template lang="pug">
 
 section.panel(:class="cssClass")
-    v-panel-button(
-        text="Куб"
-        @onClick="squareClick"
-    )
-        s-cube
-    v-panel-button(
-        text="Цилиндр"
-        @onClick="cylinderClick"
-    )
-        s-cylinder
-    v-panel-button(
-        text="Шар"
-        @onClick="sphereClick"
-    )
-        s-sphere
-    v-panel-button(
-        text="Обзор"
-        :active="reviewActive"
-        @onClick="reviewClick"
-    )
-        s-camera-rotate
-    v-panel-button(
-        text="Выбрать ось"
-        @onClick="coordinateAxesClick"
-    )
-        s-coordinate-axes
-    v-panel-button(
-        text="Добавить оси"
-        @onClick="coordinatesClick"
-    )
-        s-coordinate-axes
+    ul.panel__list
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Куб"
+                @onClick="squareClick"
+            )
+                s-cube
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Цилиндр"
+                @onClick="cylinderClick"
+            )
+                s-cylinder
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Шар"
+                @onClick="sphereClick"
+            )
+                s-sphere
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Обзор"
+                :active="reviewActive"
+                @onClick="reviewClick"
+            )
+                s-camera-rotate
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Выбрать ось"
+                @onClick="coordinateAxesClick"
+            )
+                s-coordinate-axes
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Добавить оси"
+                @onClick="coordinatesClick"
+            )
+                s-coordinate-axes
 
 
 
@@ -101,9 +114,12 @@ export default {
 
 .panel
     padding: 15px
-    border-radius: 3px
     background-color: $backgroud
-    display: grid
-    grid-template-columns: repeat(8, 120px)
-    gap: 7px
+    overflow-x: auto
+    overflow-y: hidden
+    &__list
+        display: flex
+        gap: 7px
+    &__button
+        width: 120px
 </style>

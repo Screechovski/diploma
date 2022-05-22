@@ -73,5 +73,8 @@ export default {
         drawCylinder: (context, cylinderData) => {
             context.state.instance.addCylinder(cylinderData);
         },
+        mouseMove: (context, e) => {
+            context.state.instance.mouseMove(e)
+        }
     }
 }
