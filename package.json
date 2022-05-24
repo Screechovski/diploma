@@ -4,6 +4,7 @@
     "description": "",
     "scripts": {
         "dev": "webpack serve --config ./src/webpack.dev.js",
+        "build": "webpack --config ./src/webpack.prod.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
@@ -14,10 +15,12 @@
         "@types/dat.gui": "^0.7.7",
         "@types/three": "^0.130.0",
         "bable-loader": "^0.0.1-security",
+        "css-minimizer-webpack-plugin": "^4.0.0",
         "dat.gui": "^0.7.9",
         "node-sass": "^7.0.1",
         "sass": "^1.51.0",
         "sass-loader": "^12.6.0",
+        "terser-webpack-plugin": "^5.3.1",
         "three": "^0.137.4",
         "ts-loader": "^9.2.6",
         "typescript": "^4.3.4",

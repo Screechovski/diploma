@@ -7,15 +7,18 @@ export default {
         review: true,
         square: false,
         addCoordinates: false,
+        drawing: false,
     }),
     getters: defaultGettersObject([
         "coordinateAxes",
         "review",
         "square",
-        "addCoordinates"
+        "addCoordinates",
+        "drawing",
     ]),
     mutations: {
-        toggleReview: defaultMutation("review")
+        toggleReview: defaultMutation("review"),
+        setDrawing: defaultMutation("drawing")
     },
     actions: {
         coordinateAxesClick: (context) => {
@@ -61,6 +64,9 @@ export default {
             context.dispatch("popups/hidePopup", "cylinderParams", {root: true});
             context.dispatch('modeller/drawCylinder', value, {root: true})
             context.dispatch("tree/getTree", null, {root:true})
+        },
+        setDrawing: (context, value) => {
+            context.commit("setDrawing", value);
         }
     }
 }

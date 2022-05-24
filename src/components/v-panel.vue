@@ -2,49 +2,58 @@
 
 section.panel(:class="cssClass")
     ul.panel__list
-        li.panel__item
-            v-panel-button(
-                cssClass="panel__button"
-                text="Куб"
-                @onClick="squareClick"
-            )
-                s-cube
-        li.panel__item
-            v-panel-button(
-                cssClass="panel__button"
-                text="Цилиндр"
-                @onClick="cylinderClick"
-            )
-                s-cylinder
-        li.panel__item
-            v-panel-button(
-                cssClass="panel__button"
-                text="Шар"
-                @onClick="sphereClick"
-            )
-                s-sphere
-        li.panel__item
-            v-panel-button(
-                cssClass="panel__button"
-                text="Обзор"
-                :active="reviewActive"
-                @onClick="reviewClick"
-            )
-                s-camera-rotate
-        li.panel__item
-            v-panel-button(
-                cssClass="panel__button"
-                text="Выбрать ось"
-                @onClick="coordinateAxesClick"
-            )
-                s-coordinate-axes
-        li.panel__item
-            v-panel-button(
-                cssClass="panel__button"
-                text="Добавить оси"
-                @onClick="coordinatesClick"
-            )
-                s-coordinate-axes
+        template(v-if="drawing")
+            li.panel__item.panel__hr-after
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="3D операции"
+                    @onClick="setModeling"
+                )
+                    s-modeling
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="Выбрать ось"
+                    @onClick="coordinateAxesClick"
+                )
+                    s-coordinate-axes
+        template(v-else)
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="2D чертеж"
+                    @onClick="setDrawing"
+                )
+                    s-drawing
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="Куб"
+                    @onClick="squareClick"
+                )
+                    s-cube
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="Цилиндр"
+                    @onClick="cylinderClick"
+                )
+                    s-cylinder
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="Шар"
+                    @onClick="sphereClick"
+                )
+                    s-sphere
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="Обзор"
+                    :active="reviewActive"
+                    @onClick="reviewClick"
+                )
+                    s-camera-rotate
 
 
 
@@ -60,6 +69,8 @@ import SCameraRotate from '@/svg/s-camera-rotate'
 import SCoordinateAxes from '@/svg/s-coordinate-axes'
 import SCylinder from '@/svg/s-cylinder'
 import SSphere from '@/svg/s-sphere'
+import SDrawing from '@/svg/s-drawing'
+import SModeling from '@/svg/s-modeling'
 
 export default {
     props: {
@@ -71,7 +82,9 @@ export default {
         SCameraRotate,
         SCoordinateAxes,
         SCylinder,
-        SSphere
+        SSphere,
+        SDrawing,
+        SModeling
     },
     setup(){
         const store = useStore();
@@ -96,6 +109,13 @@ export default {
         const coordinatesClick = () =>
             store.dispatch("panel/addCoordinateClick");
 
+        const drawing = computed(() =>
+            store.getters["panel/drawing"])
+        const setDrawing = () =>
+            store.dispatch("panel/setDrawing", true)
+        const setModeling = () =>
+            store.dispatch("panel/setDrawing", false)
+
         return {
             coordinateAxesClick,
             reviewActive,
@@ -103,7 +123,10 @@ export default {
             squareClick,
             coordinatesClick,
             sphereClick,
-            cylinderClick
+            cylinderClick,
+            drawing,
+            setDrawing,
+            setModeling
         }
     }
 }
@@ -122,4 +145,15 @@ export default {
         gap: 7px
     &__button
         width: 120px
+    &__hr-after
+        padding-right: 9px
+        position: relative
+        &::after
+            content: ""
+            height: 100%
+            width: 2px
+            background-color: $button-color-dark
+            position: absolute
+            top: 0
+            right: 0
 </style>
