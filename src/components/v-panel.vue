@@ -13,6 +13,22 @@ section.panel(:class="cssClass")
             li.panel__item
                 v-panel-button(
                     cssClass="panel__button"
+                    text="Прямоугольник"
+                    :active="drawingSquare"
+                    @onClick="selectOperation('drawingSquare')"
+                )
+                    s-drawing-square
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
+                    text="Точка"
+                    :active="drawingPoint"
+                    @onClick="selectOperation('drawingPoint')"
+                )
+                    s-drawing-dot
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
                     text="Выбрать ось"
                     @onClick="coordinateAxesClick"
                 )
@@ -55,8 +71,6 @@ section.panel(:class="cssClass")
                 )
                     s-camera-rotate
 
-
-
 </template>
 
 <script>
@@ -71,6 +85,8 @@ import SCylinder from '@/svg/s-cylinder'
 import SSphere from '@/svg/s-sphere'
 import SDrawing from '@/svg/s-drawing'
 import SModeling from '@/svg/s-modeling'
+import SDrawingSquare from '@/svg/s-drawing-square'
+import SDrawingDot from '@/svg/s-drawing-dot'
 
 export default {
     props: {
@@ -84,7 +100,9 @@ export default {
         SCylinder,
         SSphere,
         SDrawing,
-        SModeling
+        SModeling,
+        SDrawingSquare,
+        SDrawingDot
     },
     setup(){
         const store = useStore();
@@ -116,6 +134,14 @@ export default {
         const setModeling = () =>
             store.dispatch("panel/setDrawing", false)
 
+
+        const drawingSquare = computed(() =>
+            store.getters["panel/drawingSquare"])
+        const drawingPoint = computed(() =>
+            store.getters["panel/drawingPoint"])
+        const selectOperation = name =>
+            store.dispatch("panel/selectOperation", name)
+
         return {
             coordinateAxesClick,
             reviewActive,
@@ -126,7 +152,10 @@ export default {
             cylinderClick,
             drawing,
             setDrawing,
-            setModeling
+            setModeling,
+            selectOperation,
+            drawingSquare,
+            drawingPoint
         }
     }
 }

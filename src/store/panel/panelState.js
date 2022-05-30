@@ -3,5 +3,7 @@ export const panelState = () => ({
     review: true,
     square: false,
     addCoordinates: false,
-    drawing: false,
+    drawing: true,
+    drawingSquare: false,
+    drawingPoint: false,
 })

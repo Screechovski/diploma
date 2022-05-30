@@ -61,7 +61,9 @@ export default {
         height: 27px
         width: 27px
         .svg
-            fill: $button-color-dark
+            path,
+            react
+                fill: $button-color-dark
     &__text
         font-size: 14px
         text-transform: lowercase

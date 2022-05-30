@@ -6,4 +6,6 @@ export const panelGetters = defaultGettersObject([
     "square",
     "addCoordinates",
     "drawing",
+    "drawingSquare",
+    "drawingPoint",
 ])

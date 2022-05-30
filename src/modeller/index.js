@@ -9,7 +9,7 @@ let axesCounter = 1;
 let sphereCounter = 1;
 let cylinderCounter = 1;
 
-export default class Modeller {
+export class Modeller {
     scene;
     camera;
     renderer;
@@ -35,6 +35,14 @@ export default class Modeller {
             x: false,
             y: true,
             z: false,
+        }
+
+        this.pressedKeys = {
+            "shift": false
+        }
+        this.selectedOperations = {
+            "square": false,
+            "point": false
         }
 
         this.dotsArray = [[0,0,0]]
@@ -155,49 +163,6 @@ export default class Modeller {
         this.scene.add( gridHelper );
     }
 
-    getPosition = (event) => {
-        const offset = this.renderer.domElement.getBoundingClientRect();
-        const position = {
-            x: ((event.clientX - offset.left) / this.renderer.domElement.clientWidth) * 2 - 1,
-            y: -((event.clientY - offset.top) / this.renderer.domElement.clientHeight) * 2 + 1
-        };
-        this.rayCaster.setFromCamera(position, this.camera);
-        const intersects = this.rayCaster.intersectObjects(this.scene.children, true);
-        console.log(intersects);
-        if (intersects.length > 0) {
-            return intersects[0].point;
-        }
-    }
-
-    getPositionV2 = (event) => {
-        const vec = new THREE.Vector3(); // create once and reuse
-        const pos = new THREE.Vector3(); // create once and reuse
-
-        vec.set(
-            ( event.clientX / window.innerWidth ) * 2 - 1,
-            - ( event.clientY / window.innerHeight ) * 2 + 1,
-            0.5 );
-
-        vec.unproject( camera );
-
-        vec.sub( camera.position ).normalize();
-
-        const distance = - camera.position.z / vec.z;
-
-        pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
-    }
-
-    getPositionV3 = (event) => {
-        const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-        const mv = new THREE.Vector3(
-            (event.clientX / window.innerWidth) * 2 - 1,
-            -(event.clientY / window.innerHeight) * 2 + 1,
-            0.5 );
-        const raycaster = projector.pickingRay(mv, camera);
-        const pos = raycaster.ray.intersectPlane(planeZ);
-        return "x: " + pos.x + ", y: " + pos.y;
-    }
-
     getNativePosition = (e) => {
         let vector = new THREE.Vector3();
         const { domElement } = this.renderer;
@@ -217,29 +182,41 @@ export default class Modeller {
         }
     }
 
-
-    posc_c470 = (x = 0, y = 0, z = 0) => {
-        const axesHelper = new THREE.AxesHelper(0.2);
-        axesHelper.position.x = x;
-        axesHelper.position.y = y;
-        axesHelper.position.z = z;
-        this.scene.add(axesHelper);
-        return axesHelper;
+    operationPoint = (vector) => {
+        if (!this.pointOperation) {
+            const axesHelper = new THREE.AxesHelper(0.2);
+            this.pointOperation = axesHelper;
+            this.scene.add(axesHelper);
+        }
+        this.pointOperation.position.x = vector.x;
+        this.pointOperation.position.y = vector.y;
+        this.pointOperation.position.z = vector.z;
     }
 
-    curPos_18291f = (data) => {
-        if (!this.has && data !== null) {
-            return this.has = this.posc_c470(data.x, data.y, data.z);
+    operationProxy = (vector) => {
+        /*if (!this.has && vector !== null) {
+            return this.has = this.posc_c470(vector.x, vector.y, vector.z);
         }
-        if (this.has && data !== null) {
-            this.has.position.x = data.x;
-            this.has.position.y = data.y;
-            this.has.position.z = data.z;
+        if (this.has && vector !== null) {
+            this.has.position.x = vector.x;
+            this.has.position.y = vector.y;
+            this.has.position.z = vector.z;
+        }*/
+        if (this.selectedOperations.point) {
+            this.operationPoint(vector);
         }
+    }
+
+    cursorPositionProxy = (vector) => {
+        let varVector = vector;
+        varVector.x = Math.abs(varVector.x) < 0.05 && !this.pressedKeys.shift ? 0 : varVector.x;
+        varVector.y = Math.abs(varVector.y) < 0.05 && !this.pressedKeys.shift ? 0 : varVector.y;
+        varVector.z = Math.abs(varVector.z) < 0.05 && !this.pressedKeys.shift ? 0 : varVector.z;
+        return varVector;
     }
 
     mouseMove = (e) => {
-        this.curPos_18291f(this.getNativePosition(e));
+        this.operationProxy(this.cursorPositionProxy(this.getNativePosition(e)));
     }
 
     setCamera = (key) => {
@@ -258,7 +235,6 @@ export default class Modeller {
                 reject("Children is undefined")
             } else {
                 const cleanObjectName = this.scene.children[id].name.replace(/[^а-я]/gi, "").toLocaleLowerCase();
-                console.log(cleanObjectName);
                 switch (cleanObjectName) {
                     case "осикоординат":
                         axesCounter--
@@ -317,4 +293,25 @@ export default class Modeller {
             reject(error)
         }
     })
+
+    keyPressed = (key, flag) => {
+        if (Object.keys(this.pressedKeys).includes(key)) {
+            this.pressedKeys[key] = flag;
+            return;
+        }
+        throw Error("Unknown button")
+    }
+
+    selectOperation = ([operationName, flag]) => {
+        if (Object.keys(this.selectedOperations).includes(operationName)) {
+            this.selectedOperations[operationName] = flag;
+            return;
+        }
+        throw Error("Unknown operation")
+    }
+
+    removeAllOperations = () => {
+        Object.keys(this.selectedOperations).forEach(key =>
+            this.selectedOperations[key] = false)
+    }
 }

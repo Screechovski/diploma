@@ -44,10 +44,26 @@ export default {
         const updateRender = () =>
             store.dispatch("modeller/updateRender");
 
-        onMounted(() =>
-            window.addEventListener("resize", updateRender))
+        const keyPressHandler = (type) => (e) => {
+            const isDown = type === "down";
+            switch (e.key.toLowerCase()) {
+                case "shift": {
+                    store.dispatch("modeller/keyPress", [isDown, "shift"])
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+
+        onMounted(() => {
+            window.addEventListener("resize", updateRender)
+            window.addEventListener("keyup", keyPressHandler("up"))
+            window.addEventListener("keydown", keyPressHandler("down"))
+        })
         onUnmounted(() =>
             window.removeEventListener("resize", updateRender))
+
 
         return {
             showCoordinateAxes,

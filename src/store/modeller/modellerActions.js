@@ -1,4 +1,4 @@
-import Modeller from "@/modeller/index"
+import { Modeller } from "@/modeller/index"
 
 export const modellerActions = {
     setRef: (context, ref = null) => {
@@ -60,5 +60,14 @@ export const modellerActions = {
     },
     mouseMove: (context, e) => {
         context.state.instance.mouseMove(e)
+    },
+    keyPress: (context, [type, keyName]) => {
+        context.state.instance.keyPressed(keyName, type);
+    },
+    selectOperation: (context, value) => {
+        context.state.instance.selectOperation(value);
+    },
+    removeAllOperations: (context) => {
+        context.state.instance.removeAllOperations();
     }
 }

@@ -1,6 +1,10 @@
 <template lang="pug">
 
-section.modeller(:class="{grab, [cssClass]: cssClass}", ref="modeller", @mousemove.passive="mouseMoveHandler")
+section.modeller(
+    :class="{grab, [cssClass]: cssClass}",
+    ref="modeller",
+    @mousemove.passive="mouseMoveHandler",
+)
 
 </template>
 
@@ -26,7 +30,12 @@ export default {
         const mouseMoveHandler = (e) =>
             store.dispatch("modeller/mouseMove", e)
 
-        return { modeller, grab, mouseMoveHandler }
+
+        return {
+            modeller,
+            grab,
+            mouseMoveHandler,
+        }
     }
 }
 </script>

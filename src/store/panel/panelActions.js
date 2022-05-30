@@ -38,12 +38,22 @@ export const panelActions = {
         context.dispatch("popups/showPopup", "cylinderParams", {root: true});
     },
     cylinderSubmit: (context, value) => {
-        console.log(value);
         context.dispatch("popups/hidePopup", "cylinderParams", {root: true});
         context.dispatch('modeller/drawCylinder', value, {root: true})
         context.dispatch("tree/getTree", null, {root:true})
     },
     setDrawing: (context, value) => {
         context.commit("setDrawing", value);
+    },
+    selectOperation: (context, key) => {
+        const futureFlag = !context.getters[key];
+        const flagAliases = {
+            drawingSquare: "square",
+            drawingPoint: "point",
+        }
+        context.commit("removeAllOperations")
+        context.commit(key, futureFlag)
+        context.dispatch("modeller/removeAllOperations", null, {root: true})
+        context.dispatch("modeller/selectOperation", [flagAliases[key], futureFlag], {root: true})
     }
 }
