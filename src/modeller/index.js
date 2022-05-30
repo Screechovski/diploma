@@ -9,6 +9,10 @@ let axesCounter = 1;
 let sphereCounter = 1;
 let cylinderCounter = 1;
 
+const Num = (val) => {
+    return parseFloat((+val).toFixed(6))
+}
+
 export class Modeller {
     scene;
     camera;
@@ -45,7 +49,7 @@ export class Modeller {
             "point": false
         }
 
-        this.dotsArray = [[0, 0, 0]]
+        this.dotsArray = [[0, 1], [0, 1], [0, 1]]
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
         this.controls.enabled = false
@@ -175,13 +179,13 @@ export class Modeller {
         vector.unproject(this.camera);
 
         return {
-            x: this.selectedAxes.x ? 0 : vector.x - 1,
-            y: this.selectedAxes.y ? 0 : vector.y - 1,
-            z: this.selectedAxes.z ? 0 : vector.z + 1,
+            x: this.selectedAxes.x ? 0 : Num(vector.x - 1),
+            y: this.selectedAxes.y ? 0 : Num(vector.y - 1),
+            z: this.selectedAxes.z ? 0 : Num(vector.z + 1),
         }
     }
 
-    operationPoint = (vector) => {
+    operationMovePoint = (vector) => {
         if (!this.pointOperation) {
             const axesHelper = new THREE.AxesHelper(0.2);
             this.pointOperation = axesHelper;
@@ -192,31 +196,76 @@ export class Modeller {
         this.pointOperation.position.z = vector.z;
     }
 
-    operationProxy = (vector) => {
-        /*if (!this.has && vector !== null) {
-            return this.has = this.posc_c470(vector.x, vector.y, vector.z);
-        }
-        if (this.has && vector !== null) {
-            this.has.position.x = vector.x;
-            this.has.position.y = vector.y;
-            this.has.position.z = vector.z;
-        }*/
+    operationMoveProxy = (vector) => {
         if (this.selectedOperations.point) {
-            this.operationPoint(vector);
+            this.operationMovePoint(vector);
         }
     }
 
     cursorPositionProxy = (vector) => {
-        let varVector = vector;
-        varVector.x = Math.abs(varVector.x) < 0.05 && !this.pressedKeys.shift ? 0 : varVector.x;
-        varVector.y = Math.abs(varVector.y) < 0.05 && !this.pressedKeys.shift ? 0 : varVector.y;
-        varVector.z = Math.abs(varVector.z) < 0.05 && !this.pressedKeys.shift ? 0 : varVector.z;
+        const [xArray, yArray, zArray] = this.dotsArray;
+        let varVector = {...vector};
+
+        varVector.x = this.magnitDots(xArray, varVector.x);
+        varVector.y = this.magnitDots(yArray, varVector.y);
+        varVector.z = this.magnitDots(zArray, varVector.z);
+
         return varVector;
     }
 
-    mouseMove = (e) => {
-        this.operationProxy(this.cursorPositionProxy(this.getNativePosition(e)));
+    magnitDots = (magnitArray , axis) => {
+        let returnedValue = axis;
+
+        for (let i = 0; i < magnitArray.length; i++) {
+            const magnit = magnitArray[i];
+
+            const min = magnit - 0.05;
+            const max = magnit + 0.05;
+
+            if ((min < axis && axis < max) && !this.pressedKeys.shift) {
+                returnedValue = magnit;
+            }
+        }
+
+        return returnedValue;
     }
+
+    operationClickProxy = (vector) => {
+        if (this.selectedOperations.point) {
+            return this.operationClickPoint(vector);
+        }
+    }
+
+    operationClickPoint = (vector) => {
+        const [x,y,z] = this.dotsArray;
+        const {x: vX, y: vY, x: xZ} = vector;
+
+        this.pointOperation = false;
+        this.dotsArray = [
+            [...x, vX],
+            [...y, vY],
+            [...z, xZ]
+        ];
+        console.log(this.dotsArray);
+        this.selectedOperations.point = false;
+    }
+
+    mouseMove = (e) => {
+        this.operationMoveProxy(this.cursorPositionProxy(this.getNativePosition(e)));
+    }
+
+    clickHandler = (e) => new Promise((resolve, reject) => {
+        try {
+            this.operationClickProxy(this.cursorPositionProxy(this.getNativePosition(e)));
+            resolve(true);
+        } catch (error) {
+            reject(error);
+        }
+    })
+
+    /*(e) => {
+        console.log();
+    }*/
 
     setCamera = (key) => {
         (['x', 'y', 'z']).forEach((coordinate) => {

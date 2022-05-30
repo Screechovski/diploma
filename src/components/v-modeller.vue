@@ -4,6 +4,7 @@ section.modeller(
     :class="{grab, [cssClass]: cssClass}",
     ref="modeller",
     @mousemove.passive="mouseMoveHandler",
+    @click="mouseClickhandler"
 )
 
 </template>
@@ -18,23 +19,26 @@ export default {
         cssClass
     },
     setup(){
-        const modeller = ref(null)
-        const store = useStore()
+        const modeller = ref(null);
+        const store = useStore();
 
         onMounted(() =>
-            store.dispatch("modeller/setRef", modeller.value))
+            store.dispatch("modeller/setRef", modeller.value));
 
         const grab = computed(() =>
-            store.getters["panel/review"])
+            store.getters["panel/review"]);
 
         const mouseMoveHandler = (e) =>
-            store.dispatch("modeller/mouseMove", e)
+            store.dispatch("modeller/mouseMove", e);
 
+        const mouseClickhandler = (e) =>
+            store.dispatch("modeller/clickHandler", e);
 
         return {
             modeller,
             grab,
             mouseMoveHandler,
+            mouseClickhandler
         }
     }
 }

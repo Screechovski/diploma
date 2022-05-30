@@ -1,3 +1,5 @@
+import { FlagAliases } from "@/assets/constants";
+
 export const panelActions = {
     coordinateAxesClick: (context) => {
         context.dispatch("popups/showPopup", "coordinateAxes", {root: true});
@@ -47,13 +49,11 @@ export const panelActions = {
     },
     selectOperation: (context, key) => {
         const futureFlag = !context.getters[key];
-        const flagAliases = {
-            drawingSquare: "square",
-            drawingPoint: "point",
-        }
+
         context.commit("removeAllOperations")
         context.commit(key, futureFlag)
+
         context.dispatch("modeller/removeAllOperations", null, {root: true})
-        context.dispatch("modeller/selectOperation", [flagAliases[key], futureFlag], {root: true})
+        context.dispatch("modeller/selectOperation", [FlagAliases[key], futureFlag], {root: true})
     }
 }

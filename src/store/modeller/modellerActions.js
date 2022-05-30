@@ -1,4 +1,6 @@
 import { Modeller } from "@/modeller/index"
+import { FlagAliasesReversed } from "@/assets/constants";
+import { UserHelp } from "@/assets/constants";
 
 export const modellerActions = {
     setRef: (context, ref = null) => {
@@ -69,5 +71,13 @@ export const modellerActions = {
     },
     removeAllOperations: (context) => {
         context.state.instance.removeAllOperations();
+    },
+    clickHandler: async (context, e) => {
+        const res = await context.state.instance.clickHandler(e);
+
+        if (res === true) {
+            context.dispatch("panel/selectOperation", FlagAliasesReversed["point"], {root: true});
+            context.dispatch("helper/setLine", UserHelp.point.clickForDot)
+        }
     }
 }
