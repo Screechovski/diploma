@@ -74,7 +74,9 @@ export default {
         .panel-button
             &__icon
                 .svg
-                    fill: $button-color
+                    path,
+                    react
+                        fill: $button-color
             &__text
                 color: $button-color
 </style>

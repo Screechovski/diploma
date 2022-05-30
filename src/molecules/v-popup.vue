@@ -64,6 +64,8 @@ export default {
         padding: 15px
         background-color: $backgroud
         box-shadow: 0px 0px 20px $backgroud-dark
+        @media screen and (max-width: 768px)
+            min-width: auto
     &__header
         color: $button-color
         text-transform: lowercase

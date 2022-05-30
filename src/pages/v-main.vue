@@ -36,14 +36,22 @@ export default {
     padding: 15px
     box-sizing: border-box
     grid-template-areas: "panel panel" "tree modeller" "status-line status-line"
+    @media screen and (max-width: 768px)
+        grid-template-columns: 1fr
+        grid-template-rows: 30px 1fr 100px
+        grid-template-areas: "status-line" "modeller" "panel"
     &__panel
         grid-area: panel
         // max-width: calc(100vw - 30px)
     &__modeller
         grid-area: modeller
         max-width: calc(100vw - 235px)
+        @media screen and (max-width: 768px)
+            max-width: 100%
     &__status-line
         grid-area: status-line
     &__tree
         grid-area: tree
+        @media screen and (max-width: 768px)
+            display: none
 </style>

@@ -1,6 +1,6 @@
 export const panelState = () => ({
     coordinateAxes: false,
-    review: true,
+    review: false,
     square: false,
     addCoordinates: false,
     drawing: true,

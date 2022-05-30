@@ -34,7 +34,7 @@ section.panel(:class="cssClass")
                 )
                     s-coordinate-axes
         template(v-else)
-            li.panel__item
+            li.panel__item.panel__hr-after
                 v-panel-button(
                     cssClass="panel__button"
                     text="2D чертеж"

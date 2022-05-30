@@ -17,15 +17,15 @@ export class Modeller {
     element;
     squareCoordinates = []
 
-    constructor(element){
+    constructor(element) {
         const { clientWidth: width, clientHeight: height } = element;
 
         this.rayCaster = new THREE.Raycaster();
 
         this.scene = new THREE.Scene()
-        this.scene.background = new THREE.Color( 0x0e0e0e );
+        this.scene.background = new THREE.Color(0x0e0e0e);
 
-        this.camera = new THREE.OrthographicCamera( width / -200, width / 200, height / 200, height / -200, -1000, 1000 );
+        this.camera = new THREE.OrthographicCamera(width / -200, width / 200, height / 200, height / -200, -1000, 1000);
         this.camera.position.y = 6
 
         this.renderer = new THREE.WebGLRenderer()
@@ -45,10 +45,9 @@ export class Modeller {
             "point": false
         }
 
-        this.dotsArray = [[0,0,0]]
+        this.dotsArray = [[0, 0, 0]]
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
-
         this.controls.enabled = false
         this.controls.enableZoom = false
 
@@ -100,10 +99,10 @@ export class Modeller {
     })
 
     addSquare = (data) => {
-        const {width, height, length, startX, startY, startZ} = data;
-        const squareGeometry = new THREE.BoxGeometry( width, height, length );
-        const squareMaterial = new THREE.MeshBasicMaterial( {color: 0x6c6c6c} );
-        const square = new THREE.Mesh( squareGeometry, squareMaterial );
+        const { width, height, length, startX, startY, startZ } = data;
+        const squareGeometry = new THREE.BoxGeometry(width, height, length);
+        const squareMaterial = new THREE.MeshBasicMaterial({ color: 0x6c6c6c });
+        const square = new THREE.Mesh(squareGeometry, squareMaterial);
 
         square.position.x = +startX + width / 2;
         square.position.y = +startY + height / 2;
@@ -111,14 +110,14 @@ export class Modeller {
         square.name = "Прямоугольник " + squareCounter;
         squareCounter++;
 
-        this.scene.add( square );
+        this.scene.add(square);
     }
 
     addCylinder = (data) => {
         const { startX, height, startZ, radius, startY } = data;
-        const cylinderGeometry = new THREE.CylinderGeometry( radius, radius, height, 50 );
-        const cylinderMaterial = new THREE.MeshBasicMaterial( {color: 0x6c6c6c} );
-        const cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+        const cylinderGeometry = new THREE.CylinderGeometry(radius, radius, height, 50);
+        const cylinderMaterial = new THREE.MeshBasicMaterial({ color: 0x6c6c6c });
+        const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
 
         cylinder.position.x = +startX + radius;
         cylinder.position.y = +startY + height / 2;
@@ -126,7 +125,7 @@ export class Modeller {
         cylinder.name = "Цилиндр " + cylinderCounter;
         cylinderCounter++;
 
-        this.scene.add( cylinder );
+        this.scene.add(cylinder);
     }
 
     addSphere = (data) => {
@@ -141,8 +140,8 @@ export class Modeller {
             5 * this.radiusSegmentsK,
             radius * this.radiusSegmentsK
         );
-        const sphereMaterial = new THREE.MeshBasicMaterial( { color: 0x6c6c6c } );
-        const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x6c6c6c });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
         sphere.position.x = +startX + radius;
         sphere.position.y = +startY + radius;
@@ -150,17 +149,17 @@ export class Modeller {
         sphere.name = "Круг " + sphereCounter;
         sphereCounter++;
 
-        this.scene.add( sphere );
+        this.scene.add(sphere);
     }
 
     addPlane = () => {
         const size = 1000;
         const divisions = 1000;
-        const gridHelper = new THREE.GridHelper( size, divisions );
+        const gridHelper = new THREE.GridHelper(size, divisions);
 
         gridHelper.name = "Сетка";
 
-        this.scene.add( gridHelper );
+        this.scene.add(gridHelper);
     }
 
     getNativePosition = (e) => {
@@ -172,7 +171,7 @@ export class Modeller {
             return null;
         }
 
-        vector.set(((e.clientX - top) / domElement.offsetWidth) * 2 - 1, -((e.clientY - left) / domElement.offsetHeight) * 2 + 1,0);
+        vector.set(((e.clientX - top) / domElement.offsetWidth) * 2 - 1, -((e.clientY - left) / domElement.offsetHeight) * 2 + 1, 0);
         vector.unproject(this.camera);
 
         return {
@@ -220,7 +219,7 @@ export class Modeller {
     }
 
     setCamera = (key) => {
-        (['x','y','z']).forEach((coordinate) => {
+        (['x', 'y', 'z']).forEach((coordinate) => {
             const temp = !key.includes(coordinate);
             this.camera.position[coordinate] = temp ? 1 : 0;
             this.selectedAxes[coordinate] = temp;
