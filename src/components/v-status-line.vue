@@ -1,7 +1,7 @@
 <template lang="pug">
 
 section(:class="cssClass", class="status-line")
-    p {{line}}
+    p.status-line__line {{line}}
 
 </template>
 
@@ -27,4 +27,9 @@ export default {
 
 .status-line
     background-color: $backgroud
+    display: flex
+    align-items: center
+    padding-left: 10px
+    &__line
+        color: $button-color-dark
 </style>

@@ -3,15 +3,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { GUI } from 'dat.gui'
 import { Vector3 } from 'three';
+import { Num } from '@/assets/helper';
 
 let squareCounter = 1;
 let axesCounter = 1;
 let sphereCounter = 1;
 let cylinderCounter = 1;
-
-const Num = (val) => {
-    return parseFloat((+val).toFixed(6))
-}
 
 export class Modeller {
     scene;
@@ -49,7 +46,7 @@ export class Modeller {
             "point": false
         }
 
-        this.dotsArray = [[0, 1], [0, 1], [0, 1]]
+        this.dotsArray = [[0], [0], [0]]
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
         this.controls.enabled = false
@@ -238,7 +235,7 @@ export class Modeller {
 
     operationClickPoint = (vector) => {
         const [x,y,z] = this.dotsArray;
-        const {x: vX, y: vY, x: xZ} = vector;
+        const {x: vX, y: vY, z: xZ} = vector;
 
         this.pointOperation = false;
         this.dotsArray = [
@@ -246,7 +243,6 @@ export class Modeller {
             [...y, vY],
             [...z, xZ]
         ];
-        console.log(this.dotsArray);
         this.selectedOperations.point = false;
     }
 
@@ -298,21 +294,6 @@ export class Modeller {
             reject(error)
         }
     })
-
-    onMouseDown = (e) => {
-        /*const position = this.getPosition(e);
-
-        const planeGeometry = new THREE.PlaneGeometry()
-        const material = new THREE.MeshNormalMaterial()
-        const plane = new THREE.Mesh(planeGeometry, material)
-        plane.position.x = position.x
-        plane.position.y = position.y
-        this.scene.add(plane)*/
-
-
-        // scene.children[1].position.set(relative.x + vertexSize, relative.y, relative.z);
-        // controls.enabled = false;
-    }
 
     toggleVisible = (id) => new Promise((resolve, reject) => {
         try {

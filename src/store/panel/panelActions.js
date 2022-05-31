@@ -1,4 +1,5 @@
 import { FlagAliases } from "@/assets/constants";
+import { UserHelp } from "@/assets/constants";
 
 export const panelActions = {
     coordinateAxesClick: (context) => {
@@ -55,5 +56,14 @@ export const panelActions = {
 
         context.dispatch("modeller/removeAllOperations", null, {root: true})
         context.dispatch("modeller/selectOperation", [FlagAliases[key], futureFlag], {root: true})
+
+        switch (key) {
+            case "drawingPoint":
+                context.dispatch("helper/setLine", UserHelp.point.clickForDot, {root: true})
+                break;
+
+            default:
+                break;
+        };
     }
 }

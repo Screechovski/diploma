@@ -20,3 +20,7 @@ export const cssClass = {
     type: String,
     default: ""
 }
+
+export const Num = (val) => {
+    return parseFloat((+val).toFixed(6))
+}

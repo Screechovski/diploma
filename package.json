@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "dev": "webpack serve --config ./src/webpack.dev.js",
+        "start": "webpack serve --config ./src/webpack.dev.js",
         "build": "webpack --config ./src/webpack.prod.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
