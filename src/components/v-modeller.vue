@@ -31,8 +31,8 @@ export default {
         const mouseMoveHandler = (e) =>
             store.dispatch("modeller/mouseMove", e);
 
-        const mouseClickhandler = (e) =>
-            store.dispatch("modeller/clickHandler", e);
+        const mouseClickhandler = async (e) =>
+            await store.dispatch("modeller/clickHandler", e);
 
         return {
             modeller,

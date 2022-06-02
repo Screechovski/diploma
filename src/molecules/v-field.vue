@@ -5,6 +5,8 @@ label.field(:class="cssClass")
     input.field__input(
         :value="value"
         :class="validClass"
+        type="text"
+        :inputmode="getInputmode()"
         @input.prevent="inputHandler"
     )
 
@@ -12,7 +14,7 @@ label.field(:class="cssClass")
 
 <script>
 import { cssClass } from "@/assets/helper"
-import { computed } from '@vue/runtime-core'
+import { computed } from 'vue'
 
 export default {
     props: {
@@ -29,6 +31,10 @@ export default {
             type: Boolean,
             default: null
         },
+        type: {
+            type: String,
+            default: "text"
+        }
     },
     setup(props, { emit }){
         const validClass = computed(() => {
@@ -41,12 +47,15 @@ export default {
         })
 
         const inputHandler = (e) => {
-            emit("onInput", e.target.value.replace(/[^0-9]/gi, ''))
+            emit("onInput", e.target.value)
         }
+
+        const getInputmode = () => props.type === "text" ? "text" : "decimal";
 
         return {
             validClass,
-            inputHandler
+            inputHandler,
+            getInputmode
         }
     }
 }

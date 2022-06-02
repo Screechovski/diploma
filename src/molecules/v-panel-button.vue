@@ -61,6 +61,8 @@ export default {
         height: 27px
         width: 27px
         .svg
+            width: 100%
+            height: 100%
             path,
             react
                 fill: $button-color-dark

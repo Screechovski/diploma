@@ -10,6 +10,9 @@ export const FlagAliasesReversed = {
 
 export const UserHelp = {
     point: {
-        clickForDot: "ЛКМ чтобы добавить точку"
+        clickForDot: "Нажмите ЛКМ чтобы добавить точку"
+    },
+    square: {
+        clickForStart: "Нажмите ЛКМ чтобы выбрать центральную точку прямоугольника"
     }
 }

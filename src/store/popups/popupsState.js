@@ -4,4 +4,5 @@ export const popupsState = () => ({
     axesHelperPostion: false,
     sphereParams: false,
     cylinderParams: false,
+    exportModal: false,
 })

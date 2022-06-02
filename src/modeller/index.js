@@ -4,13 +4,14 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { GUI } from 'dat.gui'
 import { Vector3 } from 'three';
 import { Num } from '@/assets/helper';
+import { exportCollada, exportDRACO, exportGLTF, exportMMD, exportOBJ, exportPLY, exportSTL, exportUSDZ } from '@/modeller/export';
 
 let squareCounter = 1;
 let axesCounter = 1;
 let sphereCounter = 1;
 let cylinderCounter = 1;
 
-export class Modeller {
+export class Modeller{
     scene;
     camera;
     renderer;
@@ -18,7 +19,7 @@ export class Modeller {
     element;
     squareCoordinates = []
 
-    constructor(element) {
+    constructor(element, storeDispatch) {
         const { clientWidth: width, clientHeight: height } = element;
 
         this.rayCaster = new THREE.Raycaster();
@@ -32,6 +33,8 @@ export class Modeller {
         this.renderer = new THREE.WebGLRenderer()
         this.renderer.setSize(width, height)
 
+        this.storeDispatch = storeDispatch
+
         this.selectedAxes = {
             x: false,
             y: true,
@@ -44,6 +47,16 @@ export class Modeller {
         this.selectedOperations = {
             "square": false,
             "point": false
+        }
+
+        this.pointOperation = {
+            status: false,
+            value: null
+        }
+        this.squareOperation = {
+            status: false,
+            value: null,
+            dot: null
         }
 
         this.dotsArray = [[0], [0], [0]]
@@ -68,9 +81,6 @@ export class Modeller {
         this.animate()
     }
 
-    enableOrbitControls = (flag = false) => {
-        this.controls.enabled = flag
-    }
 
     animate = () => {
         requestAnimationFrame(this.animate)
@@ -84,6 +94,23 @@ export class Modeller {
         this.renderer.render(this.scene, this.camera)
     }
 
+    enableOrbitControls = (flag = false) => {
+        this.controls.enabled = flag
+    }
+
+    getChildrensArray = () => {
+        const childrensArray = Object.values(this.scene.children)
+        const cleanChildrensArray = childrensArray.map(({name, type, visible, material: { wireframe = null }}) =>
+            ({name, type, visible, wireframe}));
+
+        return cleanChildrensArray;
+    }
+
+    add = (mesh) => {
+        this.scene.add(mesh);
+        this.storeDispatch("tree/setTree", this.getChildrensArray(), {root: true})
+    }
+
     addAxesHelper = (x = 0, y = 0, z = 0) => new Promise((resolve, reject) => {
         try {
             const axesHelper = new THREE.AxesHelper(5);
@@ -92,7 +119,7 @@ export class Modeller {
             axesHelper.position.y = y;
             axesHelper.position.z = z;
             axesCounter++;
-            this.scene.add(axesHelper);
+            this.add(axesHelper);
             resolve();
         } catch (error) {
             reject(error);
@@ -111,7 +138,7 @@ export class Modeller {
         square.name = "Прямоугольник " + squareCounter;
         squareCounter++;
 
-        this.scene.add(square);
+        this.add(square);
     }
 
     addCylinder = (data) => {
@@ -126,7 +153,7 @@ export class Modeller {
         cylinder.name = "Цилиндр " + cylinderCounter;
         cylinderCounter++;
 
-        this.scene.add(cylinder);
+        this.add(cylinder);
     }
 
     addSphere = (data) => {
@@ -150,7 +177,7 @@ export class Modeller {
         sphere.name = "Круг " + sphereCounter;
         sphereCounter++;
 
-        this.scene.add(sphere);
+        this.add(sphere);
     }
 
     addPlane = () => {
@@ -160,7 +187,7 @@ export class Modeller {
 
         gridHelper.name = "Сетка";
 
-        this.scene.add(gridHelper);
+        this.add(gridHelper);
     }
 
     getNativePosition = (e) => {
@@ -172,6 +199,7 @@ export class Modeller {
             return null;
         }
 
+        // TODO на мобиле гавно
         vector.set(((e.clientX - top) / domElement.offsetWidth) * 2 - 1, -((e.clientY - left) / domElement.offsetHeight) * 2 + 1, 0);
         vector.unproject(this.camera);
 
@@ -183,20 +211,47 @@ export class Modeller {
     }
 
     operationMovePoint = (vector) => {
-        if (!this.pointOperation) {
+        if (!this.pointOperation.status) {
             const axesHelper = new THREE.AxesHelper(0.2);
-            this.pointOperation = axesHelper;
-            this.scene.add(axesHelper);
+            this.pointOperation.status = true;
+            this.pointOperation.value = axesHelper;
+            this.add(axesHelper);
         }
-        this.pointOperation.position.x = vector.x;
-        this.pointOperation.position.y = vector.y;
-        this.pointOperation.position.z = vector.z;
+        this.pointOperation.value.position.x = vector.x;
+        this.pointOperation.value.position.y = vector.y;
+        this.pointOperation.value.position.z = vector.z;
+    }
+
+    operationMoveSquare = (vector) => {
+        if (!this.squareOperation.status) {
+            if (!this.pointOperation.dot) {
+                const axesHelper = new THREE.AxesHelper(0.2);
+                this.pointOperation.dot = axesHelper;
+                this.add(axesHelper);
+            } else {
+                this.pointOperation.dot.position.x = vector.x;
+                this.pointOperation.dot.position.y = vector.y;
+                this.pointOperation.dot.position.z = vector.z;
+            }
+        }
+        if (this.squareOperation.status === "first") {
+            this.pointOperation.value.position.x = vector.x;
+            this.pointOperation.value.position.y = vector.y;
+            this.pointOperation.value.position.z = vector.z;
+        }
     }
 
     operationMoveProxy = (vector) => {
+        let was = 0;
         if (this.selectedOperations.point) {
             this.operationMovePoint(vector);
+            was++;
         }
+        if (this.selectedOperations.square) {
+            this.operationMoveSquare(vector);
+            was++;
+        }
+        if (was > 1) throw Error("2 operations is selected")
     }
 
     cursorPositionProxy = (vector) => {
@@ -231,19 +286,40 @@ export class Modeller {
         if (this.selectedOperations.point) {
             return this.operationClickPoint(vector);
         }
+        if (this.selectedOperations.square) {
+            return this.operationClickSquare(vector);
+        }
+        throw Error("Unknown operation click")
     }
 
     operationClickPoint = (vector) => {
-        const [x,y,z] = this.dotsArray;
-        const {x: vX, y: vY, z: xZ} = vector;
+        this.pointOperation.status = false;
+        this.pointOperation.value = null;
+        this.addDot(vector);
+        this.selectedOperations.point = false;
+    }
 
-        this.pointOperation = false;
+    operationClickSquare = (vector) => {
+        this.addDot(vector);
+        if (!this.squareOperation.status) {
+            const planeGeometry = new THREE.PlaneGeometry( 1, 1 );
+            const planeMaterial = new THREE.MeshBasicMaterial( {color: 0x6c6c6c, side: THREE.DoubleSide} );
+            const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            this.squareOperation.value = plane;
+            this.squareOperation.status = "first";
+            this.add( plane );
+        }
+    }
+
+    addDot = ({x: vX,y: vY,z: vZ}) => {
+        const [x,y,z] = this.dotsArray;
+
         this.dotsArray = [
             [...x, vX],
             [...y, vY],
-            [...z, xZ]
+            [...z, vZ]
         ];
-        this.selectedOperations.point = false;
     }
 
     mouseMove = (e) => {
@@ -258,10 +334,6 @@ export class Modeller {
             reject(error);
         }
     })
-
-    /*(e) => {
-        console.log();
-    }*/
 
     setCamera = (key) => {
         (['x', 'y', 'z']).forEach((coordinate) => {
@@ -288,6 +360,7 @@ export class Modeller {
                         break;
                 }
                 this.scene.remove(this.scene.children[id])
+                this.storeDispatch("tree/setTree", this.getChildrensArray(), {root: true})
                 resolve();
             }
         } catch (error) {
@@ -333,6 +406,8 @@ export class Modeller {
 
     selectOperation = ([operationName, flag]) => {
         if (Object.keys(this.selectedOperations).includes(operationName)) {
+            this.setCamera("xy");
+            this.enableOrbitControls(false);
             this.selectedOperations[operationName] = flag;
             return;
         }
@@ -342,5 +417,28 @@ export class Modeller {
     removeAllOperations = () => {
         Object.keys(this.selectedOperations).forEach(key =>
             this.selectedOperations[key] = false)
+    }
+
+    exportScene = ({type, name}) => {
+        switch (type) {
+            case "GLTF":
+                return exportGLTF(name, this.scene);
+            case 'Collada':
+                return exportCollada(name, this.scene);
+            case 'DRACO':
+                return exportDRACO(name, this.scene);
+            case 'MMD':
+                return exportMMD(name, this.scene);
+            case 'OBJ':
+                return exportOBJ(name, this.scene);
+            case 'PLY':
+                return exportPLY(name, this.scene);
+            case 'STL':
+                return exportSTL(name, this.scene);
+            case 'USDZ':
+                return exportUSDZ(name, this.scene);
+            default:
+                break;
+        }
     }
 }

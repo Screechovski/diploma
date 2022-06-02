@@ -6,6 +6,7 @@ v-popup-rectangle(v-if="showRectangleParams")
 v-popup-sphere(v-if="showSphereParams")
 v-popup-axeshelper-postion(v-if="showAxesHelperPostion")
 v-popup-cylinder(v-if="showCylinderParams")
+v-popup-export(v-if="showExportModal")
 
 </template>
 
@@ -18,6 +19,7 @@ import VPopupRectangle from "@/components/v-popup-rectangle"
 import VPopupAxeshelperPostion from "@/components/v-popup-axeshelper-postion"
 import VPopupSphere from "@/components/v-popup-sphere"
 import VPopupCylinder from "@/components/v-popup-cylinder"
+import VPopupExport from "@/components/v-popup-export"
 
 export default {
     components: {
@@ -26,7 +28,8 @@ export default {
         VPopupRectangle,
         VPopupAxeshelperPostion,
         VPopupSphere,
-        VPopupCylinder
+        VPopupCylinder,
+        VPopupExport
     },
     setup(){
         const store = useStore();
@@ -40,6 +43,9 @@ export default {
             store.getters["popups/sphereParams"])
         const showCylinderParams = computed(() =>
             store.getters["popups/cylinderParams"])
+
+        const showExportModal = computed(() =>
+            store.getters["popups/exportModal"])
 
         const updateRender = () =>
             store.dispatch("modeller/updateRender");
@@ -70,7 +76,8 @@ export default {
             showRectangleParams,
             showAxesHelperPostion,
             showSphereParams,
-            showCylinderParams
+            showCylinderParams,
+            showExportModal
         }
     }
 }

@@ -28,7 +28,7 @@ section(:class="cssClass", class="tree")
 <script>
 import { cssClass } from "@/assets/helper"
 import { useStore } from "vuex"
-import { onMounted, computed } from "vue"
+import { computed } from "vue"
 import STrash from "@/svg/s-trash"
 import SEye from "@/svg/s-eye"
 import SEyeCrossed from "@/svg/s-eye-crossed"
@@ -50,8 +50,6 @@ export default {
     props: { cssClass },
     setup(){
         const store = useStore();
-        onMounted(() =>
-            store.dispatch("tree/getTree"))
 
         const removeTreeItem = (id) =>
             store.dispatch("tree/removeItem", id);

@@ -59,8 +59,9 @@ export default {
         })
 
         const fieldHandler = (id) => (value) => {
-            fields[id].value = value;
-            fields[id].valid = !(/[^0-9]/).test(value);
+            let cleanValue = value.replace(/[^0-9]/gi, '');
+            fields[id].value = cleanValue;
+            fields[id].valid = !(/[^0-9]/).test(cleanValue);
         }
 
         const canSubmit = computed(() =>
@@ -70,7 +71,7 @@ export default {
             const cleanFields = Object.values(fields).map(({id, value}) => value);
             store.dispatch("modeller/addCoordinates", cleanFields)
             store.dispatch("popups/hidePopup", "axesHelperPostion")
-            store.dispatch("tree/getTree")
+            // store.dispatch("tree/getTree")
         }
 
         return {

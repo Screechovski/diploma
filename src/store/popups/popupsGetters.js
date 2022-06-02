@@ -5,5 +5,6 @@ export const popupsGetters = defaultGettersObject([
     "rectangleParams",
     "axesHelperPostion",
     "sphereParams",
-    "cylinderParams"
+    "cylinderParams",
+    "exportModal"
 ])

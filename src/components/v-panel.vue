@@ -70,6 +70,22 @@ section.panel(:class="cssClass")
                     @onClick="reviewClick"
                 )
                     s-camera-rotate
+        li.panel__item.panel__hr-before
+            v-panel-button(
+                cssClass="panel__button"
+                text="Импорт"
+                :active="false"
+                @onClick="()=>{}"
+            )
+                s-import
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Экспорт"
+                :active="false"
+                @onClick="clickExportModal"
+            )
+                s-export
 
 </template>
 
@@ -87,6 +103,8 @@ import SDrawing from '@/svg/s-drawing'
 import SModeling from '@/svg/s-modeling'
 import SDrawingSquare from '@/svg/s-drawing-square'
 import SDrawingDot from '@/svg/s-drawing-dot'
+import SImport from '@/svg/s-import'
+import SExport from '@/svg/s-export'
 
 export default {
     props: {
@@ -102,7 +120,9 @@ export default {
         SDrawing,
         SModeling,
         SDrawingSquare,
-        SDrawingDot
+        SDrawingDot,
+        SImport,
+        SExport
     },
     setup(){
         const store = useStore();
@@ -140,7 +160,10 @@ export default {
         const drawingPoint = computed(() =>
             store.getters["panel/drawingPoint"])
         const selectOperation = name =>
-            store.dispatch("panel/selectOperation", name)
+            store.dispatch("panel/selectOperation", { key: name })
+
+        const clickExportModal = () =>
+            store.dispatch("panel/clickExportModal")
 
         return {
             coordinateAxesClick,
@@ -155,7 +178,8 @@ export default {
             setModeling,
             selectOperation,
             drawingSquare,
-            drawingPoint
+            drawingPoint,
+            clickExportModal
         }
     }
 }
@@ -185,4 +209,15 @@ export default {
             position: absolute
             top: 0
             right: 0
+    &__hr-before
+        padding-left: 9px
+        position: relative
+        &::before
+            content: ""
+            height: 100%
+            width: 2px
+            background-color: $button-color-dark
+            position: absolute
+            top: 0
+            left: 0
 </style>

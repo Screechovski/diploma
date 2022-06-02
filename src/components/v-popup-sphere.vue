@@ -71,8 +71,9 @@ export default {
             fields.value.every(i => i.valid))
 
         const fieldHandler = (id) => (value) => {
-            fieldsObject[id].value = value;
-            fieldsObject[id].valid = !(/[^0-9]/).test(value);
+            let cleanValue = value.replace(/[^0-9]/gi, '');
+            fieldsObject[id].value = cleanValue;
+            fieldsObject[id].valid = !(/[^0-9]/).test(cleanValue);
         }
 
         const submit = () => {

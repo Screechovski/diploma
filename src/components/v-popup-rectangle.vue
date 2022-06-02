@@ -11,6 +11,7 @@ v-popup(cssClass="v-popup-rectangle" pKey="rectangleParams")
                 :value="field.value"
                 :title="field.title"
                 :valid="field.valid"
+                type="number"
                 @onInput="value => fieldHandler(field.id)(value)"
             )
     template(#footer="")
@@ -75,6 +76,7 @@ export default {
                 valid: null,
             }
         })
+        const attr = { inputmode: "numeric" }
 
         const fields = computed(() =>
             Object.values(fieldsObject))
@@ -83,8 +85,9 @@ export default {
             fields.value.every(i => i.valid))
 
         const fieldHandler = (id) => (value) => {
-            fieldsObject[id].value = value;
-            fieldsObject[id].valid = !(/[^0-9]/).test(value);
+            let cleanValue = value.replace(/[^0-9]/gi, '');
+            fieldsObject[id].value = cleanValue;
+            fieldsObject[id].valid = !(/[^0-9]/).test(cleanValue);
         }
 
         const submit = () => {
@@ -99,7 +102,8 @@ export default {
             fields,
             canSubmit,
             fieldHandler,
-            submit
+            submit,
+            attr
         }
     }
 }

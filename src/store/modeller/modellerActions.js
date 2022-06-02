@@ -1,10 +1,14 @@
 import { Modeller } from "@/modeller/index"
 import { FlagAliasesReversed } from "@/assets/constants";
 
+
 export const modellerActions = {
     setRef: (context, ref = null) => {
         if (ref) {
-            let a = new Modeller(ref);
+            let a = new Modeller(
+                ref,
+                context.dispatch
+            );
             window.modeller = a;
             context.commit('setRef', ref);
             context.commit('setInstance', a);
@@ -20,12 +24,13 @@ export const modellerActions = {
         render()
     },
     enableReview: (context, flag) => {
+        context.state.instance.removeAllOperations();
         context.state.instance.enableOrbitControls(flag);
     },
     setCoordinates: (context, coordinates) => {
         context.state.instance.setCamera(coordinates);
     },
-    /* Childrens */
+    /* Childrens *//*
     getChildrens: async (context) => {
         const childrensObject = await context.state.instance.scene.children;
         const childrensArray = Object.values(childrensObject)
@@ -33,7 +38,7 @@ export const modellerActions = {
             ({name, type, visible, wireframe}));
 
         return cleanChildrensArray;
-    },
+    },*/
     removeChildren: async (context, id) => {
         return context.state.instance.removeObject(id);
     },
@@ -72,11 +77,25 @@ export const modellerActions = {
         context.state.instance.removeAllOperations();
     },
     clickHandler: async (context, e) => {
-        const res = await context.state.instance.clickHandler(e);
+        try {
+            await context.state.instance.clickHandler(e);
+            const currentOperation = context.rootGetters["panel/getCurrentOperation"];
+            const need = currentOperation === "point";
 
-        if (res === true) {
-            context.dispatch("panel/selectOperation", FlagAliasesReversed["point"], {root: true});
+            context.dispatch(
+                "panel/selectOperation",
+                {
+                    key: FlagAliasesReversed[currentOperation],
+                    needRemove
+                }, {
+                    root: true
+                });
             context.dispatch("helper/setLine", "", {root: true})
+        } catch (error) {
+            console.warn(error);
         }
+    },
+    exportScene: (context, data) => {
+        context.state.instance.exportScene(data);
     }
 }

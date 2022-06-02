@@ -29,7 +29,10 @@ export default {
     background-color: $backgroud
     display: flex
     align-items: center
-    padding-left: 10px
+    padding: 5px 10px
     &__line
-        color: $button-color-dark
+        color: $button-color
+        line-height: 1.2em
+        @media screen and (max-width: 768px)
+            font-size: 12px
 </style>
