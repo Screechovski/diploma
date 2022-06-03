@@ -9,6 +9,8 @@ export const panelGetters = {
         "drawing",
         "drawingSquare",
         "drawingPoint",
+        "exportModal",
+        "saveModal"
     ]),
     getCurrentOperation: state => {
         if (state.review) {

@@ -16,3 +16,14 @@ export const UserHelp = {
         clickForStart: "Нажмите ЛКМ чтобы выбрать центральную точку прямоугольника"
     }
 }
+
+export const ExportTypes = [
+    "GLTF",
+    'Collada',
+    //'DRACO', // - ERROR
+    //'MMD', // - ERROR
+    //'OBJ', // -
+    'PLY',
+    //'STL', // -
+    //'USDZ', // -
+]

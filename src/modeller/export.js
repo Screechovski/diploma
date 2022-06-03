@@ -8,35 +8,35 @@ import { PLYExporter } from "three/examples/jsm/exporters/PLYExporter"
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter"
 import { USDZExporter } from "three/examples/jsm/exporters/USDZExporter"
 
-export const exportGLTF = (name, scene) => {
+export const exportGLTF = (name, scene) => { // +
     exporter(new GLTFExporter(), name, scene);
 }
 
-export const exportCollada = (name, scene) => {
+export const exportCollada = (name, scene) => { // +
     exporter(new ColladaExporter(), name, scene);
 }
 
-export const exportDRACO = (name, scene) => {
+export const exportDRACO = (name, scene) => { // - ERROR
     exporter(new DRACOExporter(), name, scene);
 }
 
-export const exportMMD = (name, scene) => {
+export const exportMMD = (name, scene) => { // - ERROR
     exporter(new MMDExporter(), name, scene);
 }
 
-export const exportOBJ = (name, scene) => {
+export const exportOBJ = (name, scene) => { // -
     exporter(new OBJExporter(), name, scene);
 }
 
-export const exportPLY = (name, scene) => {
+export const exportPLY = (name, scene) => { // +
     exporter(new PLYExporter(), name, scene);
 }
 
-export const exportSTL = (name, scene) => {
+export const exportSTL = (name, scene) => { // -
     exporter(new STLExporter(), name, scene);
 }
 
-export const exportUSDZ = (name, scene) => {
+export const exportUSDZ = (name, scene) => { // -
     exporter(new USDZExporter(), name, scene);
 }
 
@@ -44,7 +44,6 @@ const exporter = (instance, name, scene) => {
     instance.parse(
         scene,
         ( data ) => {
-            console.log( data );
             downloadObjectAsJson(data , name);
         },
         ( error ) => {

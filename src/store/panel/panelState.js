@@ -6,4 +6,6 @@ export const panelState = () => ({
     drawing: true,
     drawingSquare: false,
     drawingPoint: false,
+    exportModal: false,
+    saveModal: false
 })

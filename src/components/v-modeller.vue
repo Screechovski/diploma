@@ -1,7 +1,7 @@
 <template lang="pug">
 
 section.modeller(
-    :class="{grab, [cssClass]: cssClass}",
+    :class="{grab, cross, [cssClass]: cssClass}",
     ref="modeller",
     @mousemove.passive="mouseMoveHandler",
     @click="mouseClickhandler"
@@ -28,6 +28,9 @@ export default {
         const grab = computed(() =>
             store.getters["panel/review"]);
 
+        const cross = computed(() =>
+            store.getters["panel/drawingPoint"] || store.getters["panel/drawingSquare"]);
+
         const mouseMoveHandler = (e) =>
             store.dispatch("modeller/mouseMove", e);
 
@@ -38,7 +41,8 @@ export default {
             modeller,
             grab,
             mouseMoveHandler,
-            mouseClickhandler
+            mouseClickhandler,
+            cross
         }
     }
 }
@@ -51,5 +55,8 @@ export default {
     border-radius: $radius
 
 .grab
+    cursor: grab
+
+.cross
     cursor: crosshair
 </style>

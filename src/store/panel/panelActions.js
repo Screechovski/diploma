@@ -47,13 +47,17 @@ export const panelActions = {
     setDrawing: (context, value) => {
         context.commit("setDrawing", value);
     },
-    selectOperation: (context, { key, needRemove = true }) => {
+    disableOperation: (context, operation) => {
+        context.commit(operation, false);
+    },
+    toggleOperation: (context, { key }) => {
         const futureFlag = !context.getters[key];
+        context.commit("removeAllOperations");
+        context.commit(key, futureFlag);
 
-        context.commit("removeAllOperations")
-        context.commit(key, futureFlag)
+        context.dispatch("modeller/selectOperation", [FlagAliases[key], futureFlag], {root: true})
 
-        console.log("needRemove", needRemove);
+        /*console.log("needRemove", needRemove);
 
         needRemove && context.dispatch("modeller/removeAllOperations", null, {root: true})
         context.dispatch("modeller/selectOperation", [FlagAliases[key], futureFlag], {root: true})
@@ -68,9 +72,20 @@ export const panelActions = {
                 break;
             default:
                 break;
-        };
+        };*/
     },
     clickExportModal: (context) => {
+        context.commit("setExport", true);
         context.dispatch("popups/showPopup", "exportModal", {root: true});
-    }
+    },
+    disactiveExportModal: (context) => {
+        context.commit("setExport", false);
+    },
+    clickSave: (context) => {
+        context.commit("setSave", true);
+        context.dispatch("popups/showPopup", "saveModal", {root: true});
+    },
+    disactiveSaveModal: (context) => {
+        context.commit("setSave", false);
+    },
 }

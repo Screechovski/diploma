@@ -27,10 +27,12 @@ export default {
         }
     },
     components: { SCross },
-    setup(props, context){
+    setup(props, {emit}){
         const store = useStore();
-        const close = () =>
+        const close = () => {
             store.dispatch("popups/hidePopup", props.pKey);
+            emit("onClose")
+        }
 
         return {
             close

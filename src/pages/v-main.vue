@@ -27,17 +27,25 @@ export default {
 @import "../assets/variables"
 
 .main
-    height: 100vh
-    width: 100vw
+    $width: 100vw
+    $height: 100vh
+    $firstColumn: 200px
+    $panelHeight: 90px
+    $gap: 10px
+    $padding: 15px
+    $statuslineHeight: 30px
+
+    height: $height
+    width: $width
     display: grid
-    grid-template-rows: 100px 1fr 30px
-    grid-template-columns: 200px 1fr
-    gap: 10px
-    padding: 15px
+    grid-template-rows: $panelHeight calc($height - $panelHeight - $padding * 2 - $gap * 2 - $statuslineHeight) $statuslineHeight
+    grid-template-columns: $firstColumn calc($width - $firstColumn - $padding * 2 - $gap)
+    gap: $gap
+    padding: $padding
     box-sizing: border-box
     grid-template-areas: "panel panel" "tree modeller" "status-line status-line"
     @media screen and (max-width: 768px)
-        grid-template-columns: 1fr
+        grid-template-columns: calc(100vw - 30px)
         grid-template-rows: 30px 1fr 100px
         grid-template-areas: "status-line" "modeller" "panel"
     &__panel

@@ -6,5 +6,7 @@ export const popupsGetters = defaultGettersObject([
     "axesHelperPostion",
     "sphereParams",
     "cylinderParams",
-    "exportModal"
+    "exportModal",
+    "saveModal",
+    "saveBrowserModal"
 ])

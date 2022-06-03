@@ -1,10 +1,11 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-export" pKey="exportModal")
+v-popup(cssClass="v-popup-export" pKey="exportModal" @onClose="closeHandler")
     template(#header="") Параметры экспорта
     template(#content="")
         .v-popup-export__inner
             v-selector(
+                cssClass="v-popup-export__field"
                 :selectedLine="selectedLine"
                 :title="fieldsObject.type.title"
                 :valid="fieldsObject.type.valid"
@@ -12,6 +13,7 @@ v-popup(cssClass="v-popup-export" pKey="exportModal")
                 @select="selectItem"
             )
             v-field(
+                cssClass="v-popup-export__field"
                 :value="fieldsObject.name.value"
                 :title="fieldsObject.name.title"
                 :valid="fieldsObject.name.valid"
@@ -32,6 +34,7 @@ import VPopup from "@/molecules/v-popup"
 import VField from "@/molecules/v-field"
 import VButton from "@/molecules/v-button"
 import VSelector from "@/molecules/v-selector"
+import { ExportTypes } from "@/assets/constants"
 import { reactive, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 
@@ -59,16 +62,7 @@ export default {
             },
         })
         const selectedLine = ref("Выберите тип файла")
-        const list = [
-            'GLTF',
-            'Collada',
-            'DRACO',
-            'MMD',
-            'OBJ',
-            'PLY',
-            'STL',
-            'USDZ'
-        ];
+        const list = ExportTypes;
 
         const selectItem = ({id}) => {
             selectedLine.value = list[id]
@@ -93,7 +87,11 @@ export default {
 
             store.dispatch("modeller/exportScene", cleanValues)
             store.dispatch("popups/hidePopup", "exportModal")
+            store.dispatch("panel/disactiveExportModal")
         }
+
+        const closeHandler = () =>
+            store.dispatch("panel/disactiveExportModal")
 
         return {
             canSubmit,
@@ -102,7 +100,8 @@ export default {
             selectedLine,
             list,
             fieldsObject,
-            inputHandler
+            inputHandler,
+            closeHandler
         }
     }
 }
@@ -114,4 +113,8 @@ export default {
         display: flex
         flex-direction: column
         gap: 10px
+    &__field
+        display: grid
+        gap: 10px
+        grid-template-columns: 90px 190px
 </style>

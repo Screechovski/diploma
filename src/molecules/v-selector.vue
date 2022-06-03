@@ -58,8 +58,6 @@ export default {
             }
         }
 
-        console.log(props);
-
         const isOpen = ref(false);
 
         onMounted(() => {

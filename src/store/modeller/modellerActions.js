@@ -28,7 +28,7 @@ export const modellerActions = {
         context.state.instance.enableOrbitControls(flag);
     },
     setCoordinates: (context, coordinates) => {
-        context.state.instance.setCamera(coordinates);
+        context.state.instance.setAxis(coordinates);
     },
     /* Childrens *//*
     getChildrens: async (context) => {
@@ -76,24 +76,8 @@ export const modellerActions = {
     removeAllOperations: (context) => {
         context.state.instance.removeAllOperations();
     },
-    clickHandler: async (context, e) => {
-        try {
-            await context.state.instance.clickHandler(e);
-            const currentOperation = context.rootGetters["panel/getCurrentOperation"];
-            const need = currentOperation === "point";
-
-            context.dispatch(
-                "panel/selectOperation",
-                {
-                    key: FlagAliasesReversed[currentOperation],
-                    needRemove
-                }, {
-                    root: true
-                });
-            context.dispatch("helper/setLine", "", {root: true})
-        } catch (error) {
-            console.warn(error);
-        }
+    clickHandler: (context, e) => {
+        context.state.instance.clickHandler(e);
     },
     exportScene: (context, data) => {
         context.state.instance.exportScene(data);

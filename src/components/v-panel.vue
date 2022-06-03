@@ -15,7 +15,7 @@ section.panel(:class="cssClass")
                     cssClass="panel__button"
                     text="Прямоугольник"
                     :active="drawingSquare"
-                    @onClick="selectOperation('drawingSquare')"
+                    @onClick="toggleOperation('drawingSquare')"
                 )
                     s-drawing-square
             li.panel__item
@@ -23,7 +23,7 @@ section.panel(:class="cssClass")
                     cssClass="panel__button"
                     text="Точка"
                     :active="drawingPoint"
-                    @onClick="selectOperation('drawingPoint')"
+                    @onClick="toggleOperation('drawingPoint')"
                 )
                     s-drawing-dot
             li.panel__item
@@ -82,10 +82,18 @@ section.panel(:class="cssClass")
             v-panel-button(
                 cssClass="panel__button"
                 text="Экспорт"
-                :active="false"
+                :active="exportModal"
                 @onClick="clickExportModal"
             )
                 s-export
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Сохранить"
+                :active="isSaveActive"
+                @onClick="clickSave"
+            )
+                s-save
 
 </template>
 
@@ -105,6 +113,14 @@ import SDrawingSquare from '@/svg/s-drawing-square'
 import SDrawingDot from '@/svg/s-drawing-dot'
 import SImport from '@/svg/s-import'
 import SExport from '@/svg/s-export'
+import SSave from '@/svg/s-save'
+
+/* TODO li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Экспорт"
+        ----->  :active="false"  <-----
+*/
 
 export default {
     props: {
@@ -122,7 +138,8 @@ export default {
         SDrawingSquare,
         SDrawingDot,
         SImport,
-        SExport
+        SExport,
+        SSave
     },
     setup(){
         const store = useStore();
@@ -159,11 +176,19 @@ export default {
             store.getters["panel/drawingSquare"])
         const drawingPoint = computed(() =>
             store.getters["panel/drawingPoint"])
-        const selectOperation = name =>
-            store.dispatch("panel/selectOperation", { key: name })
+        const toggleOperation = name =>
+            store.dispatch("panel/toggleOperation", { key: name })
+
+        const exportModal = computed(() =>
+            store.getters["panel/exportModal"])
 
         const clickExportModal = () =>
             store.dispatch("panel/clickExportModal")
+
+        const clickSave = () =>
+            store.dispatch("panel/clickSave")
+        const isSaveActive = computed(() =>
+            store.getters["panel/saveModal"])
 
         return {
             coordinateAxesClick,
@@ -176,10 +201,13 @@ export default {
             drawing,
             setDrawing,
             setModeling,
-            selectOperation,
+            toggleOperation,
             drawingSquare,
             drawingPoint,
-            clickExportModal
+            clickExportModal,
+            exportModal,
+            clickSave,
+            isSaveActive
         }
     }
 }
@@ -189,13 +217,22 @@ export default {
 @import "../assets/variables"
 
 .panel
-    padding: 15px
+    padding: 7px 10px 6px 10px
     background-color: $backgroud
-    overflow-x: auto
-    overflow-y: hidden
     &__list
+        padding-top: 3px
         display: flex
         gap: 7px
+        max-width: 100%
+        overflow-x: auto
+        overflow-y: hidden
+        &::-webkit-scrollbar
+            height: 5px
+            background-color: $backgroud
+            border-radius: 2px
+        &::-webkit-scrollbar-thumb
+            background-color: $button-color-dark
+            border-radius: 2px
     &__button
         width: 120px
     &__hr-after
@@ -220,4 +257,6 @@ export default {
             position: absolute
             top: 0
             left: 0
+    &__item
+        margin-bottom: 4px
 </style>

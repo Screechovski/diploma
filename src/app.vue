@@ -7,6 +7,8 @@ v-popup-sphere(v-if="showSphereParams")
 v-popup-axeshelper-postion(v-if="showAxesHelperPostion")
 v-popup-cylinder(v-if="showCylinderParams")
 v-popup-export(v-if="showExportModal")
+v-popup-save(v-if="showSaveModal")
+v-popup-save-browser(v-if="showSaveBrowserModal")
 
 </template>
 
@@ -20,6 +22,8 @@ import VPopupAxeshelperPostion from "@/components/v-popup-axeshelper-postion"
 import VPopupSphere from "@/components/v-popup-sphere"
 import VPopupCylinder from "@/components/v-popup-cylinder"
 import VPopupExport from "@/components/v-popup-export"
+import VPopupSave from "@/components/v-popup-save"
+import VPopupSaveBrowser from "@/components/v-popup-save-browser"
 
 export default {
     components: {
@@ -29,7 +33,9 @@ export default {
         VPopupAxeshelperPostion,
         VPopupSphere,
         VPopupCylinder,
-        VPopupExport
+        VPopupExport,
+        VPopupSave,
+        VPopupSaveBrowser
     },
     setup(){
         const store = useStore();
@@ -46,6 +52,12 @@ export default {
 
         const showExportModal = computed(() =>
             store.getters["popups/exportModal"])
+
+        const showSaveModal = computed(() =>
+            store.getters["popups/saveModal"])
+
+        const showSaveBrowserModal = computed(() =>
+            store.getters["popups/saveBrowserModal"])
 
         const updateRender = () =>
             store.dispatch("modeller/updateRender");
@@ -77,7 +89,9 @@ export default {
             showAxesHelperPostion,
             showSphereParams,
             showCylinderParams,
-            showExportModal
+            showExportModal,
+            showSaveModal,
+            showSaveBrowserModal
         }
     }
 }

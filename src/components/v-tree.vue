@@ -14,7 +14,7 @@ section(:class="cssClass", class="tree")
             .tree-item__button-row
                 button.tree-item__button(@click="removeTreeItem(id)")
                     s-trash
-                button.tree-item__button(@click="() => {}")
+                button.tree-item__button(@click="editItem(id)")
                     s-edit
                 button.tree-item__button(@click="toggleVisible(id)")
                     s-eye(v-if="item.visible")
@@ -45,7 +45,7 @@ export default {
         SEdit,
         SEyeCrossed,
         SSquare,
-        SSquareFilled
+        SSquareFilled,
     },
     props: { cssClass },
     setup(){
@@ -68,13 +68,18 @@ export default {
         const toggleWireframe = (id) =>
             store.dispatch("tree/toggleWireframe", id)
 
+        const editItem = (id) => {
+            console.log("editItem", id);
+        }
+
         return {
             items,
             removeTreeItem,
             treeisEmpty,
             addCoordinates,
             toggleVisible,
-            toggleWireframe
+            toggleWireframe,
+            editItem
         }
     }
 }
@@ -85,12 +90,22 @@ export default {
 
 .tree
     background-color: $backgroud
-    padding: 5px
+    padding: 10px 6px 10px 10px
     &__list
         display: flex
         flex-direction: column
         gap: 5px
+        max-height: 100%
+        overflow: auto
+        &::-webkit-scrollbar
+            width: 5px
+            background-color: $backgroud
+            border-radius: 2px
+        &::-webkit-scrollbar-thumb
+            background-color: $button-color-dark
+            border-radius: 2px
     &__item
+        margin-right: 4px
 
 .tree-item
     padding: 7px

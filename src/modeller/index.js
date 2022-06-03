@@ -5,6 +5,7 @@ import { GUI } from 'dat.gui'
 import { Vector3 } from 'three';
 import { Num } from '@/assets/helper';
 import { exportCollada, exportDRACO, exportGLTF, exportMMD, exportOBJ, exportPLY, exportSTL, exportUSDZ } from '@/modeller/export';
+import { FlagAliasesReversed } from '@/assets/constants';
 
 let squareCounter = 1;
 let axesCounter = 1;
@@ -289,7 +290,6 @@ export class Modeller{
         if (this.selectedOperations.square) {
             return this.operationClickSquare(vector);
         }
-        throw Error("Unknown operation click")
     }
 
     operationClickPoint = (vector) => {
@@ -297,6 +297,7 @@ export class Modeller{
         this.pointOperation.value = null;
         this.addDot(vector);
         this.selectedOperations.point = false;
+        this.storeDispatch("panel/disableOperation", FlagAliasesReversed["point"], {root: true})
     }
 
     operationClickSquare = (vector) => {
@@ -335,7 +336,7 @@ export class Modeller{
         }
     })
 
-    setCamera = (key) => {
+    setAxis = (key) => {
         (['x', 'y', 'z']).forEach((coordinate) => {
             const temp = !key.includes(coordinate);
             this.camera.position[coordinate] = temp ? 1 : 0;
@@ -406,12 +407,16 @@ export class Modeller{
 
     selectOperation = ([operationName, flag]) => {
         if (Object.keys(this.selectedOperations).includes(operationName)) {
-            this.setCamera("xy");
+            !this.hasAxis() && this.setAxis("xy"); // если не выбрана плоскость выбирает XY
             this.enableOrbitControls(false);
             this.selectedOperations[operationName] = flag;
-            return;
+        } else {
+            console.warn("Unknown operation")
         }
-        throw Error("Unknown operation")
+    }
+
+    hasAxis = () => {
+        return Object.values(this.selectedAxes).some(i => i);
     }
 
     removeAllOperations = () => {
