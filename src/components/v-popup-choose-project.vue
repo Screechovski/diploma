@@ -1,30 +1,27 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-export" pKey="exportModal")
-    template(#header="") Параметры экспорта
+v-popup(cssClass="v-popup-choose-project" pKey="chooseProject" @onClose="closeHandler")
+    template(#header="") Выбор проекта
     template(#content="")
-        .v-popup-export__inner
+        .v-popup-choose-project__inner
             v-selector(
-                cssClass="v-popup-export__field"
+                cssClass="v-popup-choose-project__field"
                 :selectedLine="selectedLine"
                 :title="fieldsObject.type.title"
                 :valid="fieldsObject.type.valid"
                 :list="list"
                 @select="selectItem"
             )
-            v-field(
-                cssClass="v-popup-export__field"
-                :value="fieldsObject.name.value"
-                :title="fieldsObject.name.title"
-                :valid="fieldsObject.name.valid"
-                type="text"
-                @onInput="inputHandler"
+            v-button(
+                text="Выбрать"
+                :disabled="false"
+                @press="()=>{}"
             )
     template(#footer="")
         v-button(
-            text="Скачать"
-            :disabled="!canSubmit"
-            @press="submit"
+            text="Новый проект"
+            :disabled="false"
+            @press="()=>{}"
         )
 
 </template>
@@ -61,7 +58,7 @@ export default {
                 valid: null,
             },
         })
-        const selectedLine = ref("Выберите тип файла")
+        const selectedLine = ref("Выберите проект")
         const list = ExportTypes;
 
         const selectItem = ({id}) => {
@@ -81,13 +78,6 @@ export default {
         }
 
         const submit = () => {
-            const cleanValues = {};
-            Object.values(fieldsObject).forEach(item =>
-                cleanValues[item.id] = item.value)
-
-            store.dispatch("modeller/exportScene", cleanValues)
-            store.dispatch("popups/hidePopup", "exportModal")
-            store.dispatch("panel/disactiveExportModal")
         }
 
         return {
@@ -97,20 +87,14 @@ export default {
             selectedLine,
             list,
             fieldsObject,
-            inputHandler,
+            inputHandler
         }
     }
 }
 </script>
 
 <style lang="sass">
-.v-popup-export
-    &__inner
-        display: flex
-        flex-direction: column
-        gap: 10px
-    &__field
-        display: grid
-        gap: 10px
-        grid-template-columns: 90px 190px
+
+.v-popup-choose-project
+
 </style>

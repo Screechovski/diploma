@@ -1,3 +1,5 @@
+import { ProjectHash } from "@/assets/constants";
+
 export const defaultMutation = (key) => (state, value) => {
     state[key] = value;
 }
@@ -35,3 +37,32 @@ export const downloadObjectAsJson = (exportObj, exportName) => {
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 }
+
+export const getProjectKeysFromLocalStorage = () => {
+    let result = [];
+    Object.keys(window.localStorage).forEach(lsKey => {
+        if (lsKey.indexOf(ProjectHash) !== -1) {
+            result.push(lsKey);
+        }
+    })
+    return result;
+}
+
+export const getProjectNamesFromLocalStorage = () => {
+    const projectKeys = getProjectKeysFromLocalStorage();
+    return projectKeys.map(i => i.replace(ProjectHash + ":", ""));
+}
+
+export const saveToLocalStorage = (key, value) => {
+    if (localStorage) {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+};
+
+export const getFromLocalStorage = (key) => {
+    if (localStorage && localStorage.getItem(key)) {
+        return JSON.parse(localStorage.getItem(key));
+    } else {
+        return null;
+    }
+};

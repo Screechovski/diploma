@@ -27,3 +27,5 @@ export const ExportTypes = [
     //'STL', // -
     //'USDZ', // -
 ]
+
+export const ProjectHash = "8A8A600F88E4B";

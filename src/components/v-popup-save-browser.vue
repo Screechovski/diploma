@@ -52,8 +52,8 @@ export default {
         }
 
         const submit = () => {
-            console.log("value", field.name.value);
-            store.dispatch("popups/hidePopup", "saveBrowserModal")
+            store.dispatch("popups/hidePopup", "saveBrowserModal"); // TODO проверка на уже существующий проект, и warning о том что перезапишет фаил
+            console.log("value save-browser", field.name.value);
         }
 
         const canSubmit = computed(() =>
@@ -61,7 +61,6 @@ export default {
 
         return {
             field,
-            closeHandler,
             inputHandler,
             canSubmit,
             submit
