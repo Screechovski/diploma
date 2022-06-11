@@ -68,4 +68,7 @@ export const getFromLocalStorage = (key) => {
 };
 
 export const getLSColor = (key) =>
-    localStorage ? localStorage.getItem("THEME::" + key) : null
+    localStorage ? localStorage.getItem("THEME::" + key) : null;
+
+export const setLSColor = (key, value) =>
+    localStorage.setItem("THEME::" + key, value);

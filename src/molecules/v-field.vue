@@ -80,6 +80,6 @@ export default {
             color: var(--button-color)
             border-color: var(--button-color)
         &.error
-            color: var(--red)
-            border-color: var(--red)
+            color: var(--error)
+            border-color: var(--error)
 </style>

@@ -455,12 +455,4 @@ export class Modeller{
             reject(error);
         }
     })
-
-    /* {
-        console.log(type);
-
-        const json = scene.toJSON();
-
-        //const scene = new THREE.ObjectLoader().parse( json );
-    }*/
 }

@@ -1,3 +1,14 @@
 export const coreGetters = {
-    getVariables: (state) => state.colors
+    getVariablesObject: (state) => {
+        const colorsObject = state.colors;
+
+        let styles = {};
+
+        Object.keys(colorsObject).forEach(key => {
+            styles["--" + key] = colorsObject[key];
+        })
+
+        return styles;
+    },
+    getColorsObject: (state) => state.colors,
 }

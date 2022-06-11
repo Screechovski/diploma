@@ -54,7 +54,6 @@ export default {
         }
 
         const closeSaveHandler = () => {
-            console.log(1);
             store.dispatch("panel/disactiveSaveModal")
         }
 

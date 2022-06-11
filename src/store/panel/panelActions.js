@@ -85,16 +85,15 @@ export const panelActions = {
 
     /* set settings */
     settingsClick: (context) => {
-        //context.dispatch("popups/showPopup", "_", {root: true});
+        context.dispatch("popups/showPopup", "settingsModal", {root: true});
         context.commit("setSettingsModal", true);
     },
-    settingsSubmit: (context, value) => {
-       // context.dispatch("popups/hidePopup", "rectangleParams", {root: true});
-        //context.dispatch("modeller/drawSquare", value, {root: true})
-       // context.dispatch("disactiveSettingsParams");
+    settingsSubmit: (context) => {
+        context.dispatch("disactiveSettingsParams");
+        context.dispatch("popups/hidePopup", "settingsModal", {root: true});
     },
     disactiveSettingsParams: (context) => {
-        //context.commit("setSettings", false);
+        context.commit("setSettingsModal", false);
     },
 
     setDrawing: (context, value) => {

@@ -9,5 +9,6 @@ export const popupsGetters = defaultGettersObject([
     "exportModal",
     "saveModal",
     "saveBrowserModal",
-    "messageBox",
+    "messageBoxModal",
+    "settingsModal",
 ])

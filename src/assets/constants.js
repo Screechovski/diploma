@@ -49,5 +49,15 @@ export const defaultVariables = {
     "backgroud-dark": "#000000",
     "backgroud": "#0a0a0a",
     "backgroud-light": "#1d1d1d",
-    "red": "#ff3232"
+    "error": "#ff3232"
+}
+
+export const variablesRu = {
+    "button-color": "Цвет кнопок",
+    "button-color-dark":"Цвет кнопок тёмный",
+    "radius": "Радиус",
+    "backgroud-dark": "Цвет фона тёмный",
+    "backgroud": "Цвет фона",
+    "backgroud-light": "Цвет фона светлый",
+    "error": "Цвет ошибки"
 }

@@ -7,5 +7,6 @@ export const popupsState = () => ({
     exportModal: false,
     saveModal: false,
     saveBrowserModal: false,
-    messageBox: false,
+    messageBoxModal: false,
+    settingsModal: false,
 })

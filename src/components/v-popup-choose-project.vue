@@ -70,7 +70,6 @@ export default {
         const canSubmit = computed(() =>
             Object.values(fieldsObject).every(i => i.valid));
 
-
         const inputHandler = (value) => {
             const cleanValue = value.replace(/[^0-9a-z]/gi, '');
             fieldsObject.name.valid = cleanValue.length > 2;

@@ -11,6 +11,7 @@ main.main(:style="colorsVarStyles")
     v-popup-save(v-if="showSaveModal")
     v-popup-save-browser(v-if="showSaveBrowserModal")
     v-popup-message-box(v-if="showMessageBox")
+    v-popup-settings(v-if="showSettingsModal")
 
 </template>
 
@@ -26,8 +27,8 @@ import VPopupCylinder from "@/components/v-popup-cylinder"
 import VPopupExport from "@/components/v-popup-export"
 import VPopupSave from "@/components/v-popup-save"
 import VPopupSaveBrowser from "@/components/v-popup-save-browser"
-
 import VPopupMessageBox from "@/components/v-popup-message-box"
+import VPopupSettings from "@/components/v-popup-settings"
 
 export default {
     components: {
@@ -40,8 +41,8 @@ export default {
         VPopupExport,
         VPopupSave,
         VPopupSaveBrowser,
-
-        VPopupMessageBox
+        VPopupMessageBox,
+        VPopupSettings,
     },
     setup(){
         const store = useStore();
@@ -68,21 +69,12 @@ export default {
         const updateRender = () =>
             store.dispatch("modeller/updateRender");
 
-        const colorsVarStyles = computed(() => {
-            const colorsObject = store.getters["core/getVariables"];
-
-            let styles = {};
-
-            Object.keys(colorsObject).forEach(key => {
-                styles["--" + key] = colorsObject[key];
-            })
-
-            return styles;
-        })
+        const colorsVarStyles = computed(() =>
+            store.getters["core/getVariablesObject"])
 
         // asd
         const showMessageBox = computed(() =>
-            store.getters["popups/messageBox"])
+            store.getters["popups/messageBoxModal"])
 
         const keyPressHandler = (type) => (e) => {
             const isDown = type === "down";
@@ -95,6 +87,9 @@ export default {
                     break;
             }
         }
+
+        const showSettingsModal = computed(() =>
+            store.getters["popups/settingsModal"])
 
         onMounted(() => {
             window.addEventListener("resize", updateRender)
@@ -115,7 +110,8 @@ export default {
             showSaveModal,
             showSaveBrowserModal,
             showMessageBox,
-            colorsVarStyles
+            colorsVarStyles,
+            showSettingsModal
         }
     }
 }
