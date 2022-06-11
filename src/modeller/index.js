@@ -446,4 +446,21 @@ export class Modeller{
                 break;
         }
     }
+
+    getSceneJSON = () => new Promise((resolve, reject) => {
+        try {
+            const json = JSON.stringify(this.scene.toJSON());
+            resolve(json);
+        } catch (error) {
+            reject(error);
+        }
+    })
+
+    /* {
+        console.log(type);
+
+        const json = scene.toJSON();
+
+        //const scene = new THREE.ObjectLoader().parse( json );
+    }*/
 }

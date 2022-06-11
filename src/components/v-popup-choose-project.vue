@@ -78,6 +78,7 @@ export default {
         }
 
         const submit = () => {
+            console.log("choose-project click");
         }
 
         return {

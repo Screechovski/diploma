@@ -7,6 +7,11 @@ export const panelMutations = {
     drawingPoint: defaultMutation("drawingPoint"),
     setExport: defaultMutation("exportModal"),
     setSave: defaultMutation("saveModal"),
+    setAxis: defaultMutation("addCoordinates"),
+    setModelingCube: defaultMutation("modelingCube"),
+    setModelingCylinder: defaultMutation("modelingCylinder"),
+    setModelingSphere: defaultMutation("modelingSphere"),
+    setSettingsModal: defaultMutation("settingsModal"),
     removeAllOperations: (state) => {
         state.drawingSquare = false;
         state.drawingPoint = false;

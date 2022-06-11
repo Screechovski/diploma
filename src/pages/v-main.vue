@@ -24,8 +24,6 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .main
     $width: 100vw
     $height: 100vh

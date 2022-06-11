@@ -1,6 +1,6 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-save" pKey="saveModal")
+v-popup(cssClass="v-popup-save" pKey="saveModal" @onClose="closeSaveHandler")
     template(#header="") Сохранить проект
     template(#content="")
         .v-popup-save__inner
@@ -53,11 +53,17 @@ export default {
             store.dispatch("popups/hidePopup", "saveModal")
         }
 
+        const closeSaveHandler = () => {
+            console.log(1);
+            store.dispatch("panel/disactiveSaveModal")
+        }
+
 
         return {
             localHandler,
             browserHandler,
-            serverHandler
+            serverHandler,
+            closeSaveHandler
         }
     }
 }

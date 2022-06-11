@@ -6,3 +6,4 @@ export const popupsActions = {
         context.commit('hidePopup', key)
     }
 }
+

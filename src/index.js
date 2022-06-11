@@ -6,4 +6,4 @@ import App from "@/app.vue";
 
 createApp({
     render: () => h(App),
-}).use(store).mount("#main")
+}).use(store).mount("#body")

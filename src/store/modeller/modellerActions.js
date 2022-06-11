@@ -81,5 +81,9 @@ export const modellerActions = {
     },
     exportScene: (context, data) => {
         context.state.instance.exportScene(data);
+    },
+    save: async (context, {name}) => {
+        const loader = await context.state.instance.getSceneJSON();
+        console.log("action save", loader, typeof loader, name);
     }
 }

@@ -40,8 +40,6 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .panel-button
     height: 70px
     display: flex
@@ -50,7 +48,7 @@ export default {
     align-items: center
     gap: 5px
     background-color: transparent
-    border: 2px solid $button-color-dark
+    border: 2px solid var(--button-color-dark)
     cursor: pointer
     &:hover
         transform: translate(-1px,-1px)
@@ -65,20 +63,20 @@ export default {
             height: 100%
             path,
             react
-                fill: $button-color-dark
+                fill: var(--button-color-dark)
     &__text
         font-size: 14px
         text-transform: lowercase
-        color: $button-color-dark
+        color: var(--button-color-dark)
     &.active
-        border: 2px solid $button-color
+        border: 2px solid var(--button-color)
         transform: translate(1px, 1px)
         .panel-button
             &__icon
                 .svg
                     path,
                     react
-                        fill: $button-color
+                        fill: var(--button-color)
             &__text
-                color: $button-color
+                color: var(--button-color)
 </style>

@@ -10,7 +10,11 @@ export const panelGetters = {
         "drawingSquare",
         "drawingPoint",
         "exportModal",
-        "saveModal"
+        "saveModal",
+        "modelingCube",
+        "modelingCylinder",
+        "modelingSphere",
+        "settingsModal",
     ]),
     getCurrentOperation: state => {
         if (state.review) {
@@ -22,5 +26,6 @@ export const panelGetters = {
         if (state.drawingPoint) {
             return "point"
         }
+        return null
     }
 }

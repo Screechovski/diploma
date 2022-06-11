@@ -23,15 +23,13 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .status-line
-    background-color: $backgroud
+    background-color: var(--backgroud)
     display: flex
     align-items: center
     padding: 5px 10px
     &__line
-        color: $button-color
+        color: var(--button-color)
         line-height: 1.2em
         @media screen and (max-width: 768px)
             font-size: 12px

@@ -23,17 +23,15 @@ export default {
 </script>
 
 <template lang="pug">
-button.button(@click="clickHandler", type="button", :class="{'button--disabled': disabled }") {{text}}
+button.button(@click="clickHandler", type="button", :class="{'button--disabled': disabled, [cssClass]: cssClass }") {{text}}
 </template>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .button
     font-size: 14px
-    color: $button-color
+    color: var(--button-color)
     height: 3em
-    border: 2px solid $button-color
+    border: 2px solid var(--button-color)
     text-transform: lowercase
     padding: 0em 0.8em
     background-color: transparent
@@ -43,8 +41,8 @@ button.button(@click="clickHandler", type="button", :class="{'button--disabled':
     &:active
         transform: translate(1px,1px)
     &.button--disabled
-        color: $button-color-dark
-        border: 2px solid $button-color-dark
+        color: var(--button-color-dark)
+        border: 2px solid var(--button-color-dark)
         transform: translate(1px,1px)
         cursor: not-allowed
 

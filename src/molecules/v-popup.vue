@@ -42,8 +42,6 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .popup
     position: fixed
     height: 100vh
@@ -64,12 +62,12 @@ export default {
         min-width: 400px
         max-width: 900px
         padding: 15px
-        background-color: $backgroud
-        box-shadow: 0px 0px 20px $backgroud-dark
+        background-color: var(--backgroud)
+        box-shadow: 0px 0px 20px var(--backgroud-dark)
         @media screen and (max-width: 768px)
             min-width: auto
     &__header
-        color: $button-color
+        color: var(--button-color)
         text-transform: lowercase
     &__close
         position: absolute
@@ -77,7 +75,7 @@ export default {
         right: 3px
         height: 21px
         width: 21px
-        border: 2px solid $button-color
+        border: 2px solid var(--button-color)
         display: flex
         align-items: center
         justify-content: center
@@ -91,5 +89,5 @@ export default {
         .svg
             max-height: 50%
             max-width: 50%
-            fill: $button-color
+            fill: var(--button-color)
 </style>

@@ -1,14 +1,16 @@
 <template lang="pug">
 
-v-main
-v-popup-coordinate-axes(v-if="showCoordinateAxes")
-v-popup-rectangle(v-if="showRectangleParams")
-v-popup-sphere(v-if="showSphereParams")
-v-popup-axeshelper-postion(v-if="showAxesHelperPostion")
-v-popup-cylinder(v-if="showCylinderParams")
-v-popup-export(v-if="showExportModal")
-v-popup-save(v-if="showSaveModal")
-v-popup-save-browser(v-if="showSaveBrowserModal")
+main.main(:style="colorsVarStyles")
+    v-main
+    v-popup-coordinate-axes(v-if="showCoordinateAxes")
+    v-popup-cube(v-if="showRectangleParams")
+    v-popup-sphere(v-if="showSphereParams")
+    v-popup-axeshelper-postion(v-if="showAxesHelperPostion")
+    v-popup-cylinder(v-if="showCylinderParams")
+    v-popup-export(v-if="showExportModal")
+    v-popup-save(v-if="showSaveModal")
+    v-popup-save-browser(v-if="showSaveBrowserModal")
+    v-popup-message-box(v-if="showMessageBox")
 
 </template>
 
@@ -17,7 +19,7 @@ import { computed, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import VMain from "@/pages/v-main"
 import VPopupCoordinateAxes from "@/components/v-popup-coordinate-axes"
-import VPopupRectangle from "@/components/v-popup-rectangle"
+import VPopupCube from "@/components/v-popup-cube"
 import VPopupAxeshelperPostion from "@/components/v-popup-axeshelper-postion"
 import VPopupSphere from "@/components/v-popup-sphere"
 import VPopupCylinder from "@/components/v-popup-cylinder"
@@ -25,17 +27,21 @@ import VPopupExport from "@/components/v-popup-export"
 import VPopupSave from "@/components/v-popup-save"
 import VPopupSaveBrowser from "@/components/v-popup-save-browser"
 
+import VPopupMessageBox from "@/components/v-popup-message-box"
+
 export default {
     components: {
         VMain,
         VPopupCoordinateAxes,
-        VPopupRectangle,
+        VPopupCube,
         VPopupAxeshelperPostion,
         VPopupSphere,
         VPopupCylinder,
         VPopupExport,
         VPopupSave,
-        VPopupSaveBrowser
+        VPopupSaveBrowser,
+
+        VPopupMessageBox
     },
     setup(){
         const store = useStore();
@@ -61,6 +67,22 @@ export default {
 
         const updateRender = () =>
             store.dispatch("modeller/updateRender");
+
+        const colorsVarStyles = computed(() => {
+            const colorsObject = store.getters["core/getVariables"];
+
+            let styles = {};
+
+            Object.keys(colorsObject).forEach(key => {
+                styles["--" + key] = colorsObject[key];
+            })
+
+            return styles;
+        })
+
+        // asd
+        const showMessageBox = computed(() =>
+            store.getters["popups/messageBox"])
 
         const keyPressHandler = (type) => (e) => {
             const isDown = type === "down";
@@ -91,19 +113,22 @@ export default {
             showCylinderParams,
             showExportModal,
             showSaveModal,
-            showSaveBrowserModal
+            showSaveBrowserModal,
+            showMessageBox,
+            colorsVarStyles
         }
     }
 }
 </script>
 
 <style lang="sass">
-@import "./assets/variables"
-
 body
     overflow: hidden
-    background-color: $backgroud-dark
+
 *
     font-family: 'Source Code Pro', 'DejaVu Sans', serif
     font-weight: 600
+
+.main
+    background-color: var(--backgroud-dark)
 </style>

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-export" pKey="exportModal")
+v-popup(cssClass="v-popup-export" pKey="exportModal" @onClose="closeHandler")
     template(#header="") Параметры экспорта
     template(#content="")
         .v-popup-export__inner
@@ -90,6 +90,9 @@ export default {
             store.dispatch("panel/disactiveExportModal")
         }
 
+        const closeHandler = () =>
+            store.dispatch("panel/disactiveExportModal")
+
         return {
             canSubmit,
             submit,
@@ -98,6 +101,7 @@ export default {
             list,
             fieldsObject,
             inputHandler,
+            closeHandler,
         }
     }
 }

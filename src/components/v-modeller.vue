@@ -49,10 +49,8 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables.sass"
-
 .modeller
-    border-radius: $radius
+    border-radius: var(--radius)
 
 .grab
     cursor: grab

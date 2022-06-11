@@ -62,26 +62,24 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .field
     display: flex
     align-items: center
     gap: 7px
     &__title
-        color: $button-color
+        color: var(--button-color)
     &__input
-        border: 1px solid $button-color-dark
+        border: 1px solid var(--button-color-dark)
         background-color: transparent
         font-size: 14px
         padding: 0.5em
         outline: none
-        color: $button-color-dark
+        color: var(--button-color-dark)
         box-sizing: border-box
         &.success
-            color: $button-color
-            border-color: $button-color
+            color: var(--button-color)
+            border-color: var(--button-color)
         &.error
-            color: $red
-            border-color: $red
+            color: var(--red)
+            border-color: var(--red)
 </style>

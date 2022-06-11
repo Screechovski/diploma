@@ -5,5 +5,7 @@ export const popupsState = () => ({
     sphereParams: false,
     cylinderParams: false,
     exportModal: false,
-    saveModal: false
+    saveModal: false,
+    saveBrowserModal: false,
+    messageBox: false,
 })

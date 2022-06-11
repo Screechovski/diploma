@@ -66,3 +66,6 @@ export const getFromLocalStorage = (key) => {
         return null;
     }
 };
+
+export const getLSColor = (key) =>
+    localStorage ? localStorage.getItem("THEME::" + key) : null

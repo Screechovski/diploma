@@ -27,8 +27,6 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .checkbox
     display: flex
     align-items: center
@@ -38,14 +36,14 @@ export default {
         display: block
         height: 21px
         width: 21px
-        border: 2px solid $button-color
+        border: 2px solid var(--button-color)
         display: flex
         align-items: center
         justify-content: center
         .svg
             max-height: 60%
             max-width: 60%
-            fill: $button-color
+            fill: var(--button-color)
     &__inner
-        color: $button-color
+        color: var(--button-color)
 </style>

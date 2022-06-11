@@ -8,5 +8,6 @@ export const popupsGetters = defaultGettersObject([
     "cylinderParams",
     "exportModal",
     "saveModal",
-    "saveBrowserModal"
+    "saveBrowserModal",
+    "messageBox",
 ])

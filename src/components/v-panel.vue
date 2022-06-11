@@ -31,6 +31,7 @@ section.panel(:class="cssClass")
                     cssClass="panel__button"
                     text="Выбрать ось"
                     @onClick="coordinateAxesClick"
+                    :active="isAddCoordinates"
                 )
                     s-coordinate-axes
         template(v-else)
@@ -45,13 +46,15 @@ section.panel(:class="cssClass")
                 v-panel-button(
                     cssClass="panel__button"
                     text="Куб"
-                    @onClick="squareClick"
+                    :active="isModelingCube"
+                    @onClick="cubeClick"
                 )
                     s-cube
             li.panel__item
                 v-panel-button(
                     cssClass="panel__button"
                     text="Цилиндр"
+                    :active="isModelingCylinder"
                     @onClick="cylinderClick"
                 )
                     s-cylinder
@@ -59,6 +62,7 @@ section.panel(:class="cssClass")
                 v-panel-button(
                     cssClass="panel__button"
                     text="Шар"
+                    :active="isModelingSphere"
                     @onClick="sphereClick"
                 )
                     s-sphere
@@ -73,11 +77,11 @@ section.panel(:class="cssClass")
         li.panel__item.panel__hr-before
             v-panel-button(
                 cssClass="panel__button"
-                text="Импорт"
+                text="Новый проект"
                 :active="false"
-                @onClick="()=>{}"
+                @onClick="newClickHandler"
             )
-                s-import
+                s-new-file
         li.panel__item
             v-panel-button(
                 cssClass="panel__button"
@@ -94,6 +98,14 @@ section.panel(:class="cssClass")
                 @onClick="clickSave"
             )
                 s-save
+        li.panel__item
+            v-panel-button(
+                cssClass="panel__button"
+                text="Настройки"
+                :active="isSettingsModal"
+                @onClick="settingsClick"
+            )
+                s-settings
 
 </template>
 
@@ -111,16 +123,10 @@ import SDrawing from '@/svg/s-drawing'
 import SModeling from '@/svg/s-modeling'
 import SDrawingSquare from '@/svg/s-drawing-square'
 import SDrawingDot from '@/svg/s-drawing-dot'
-import SImport from '@/svg/s-import'
+import SNewFile from '@/svg/s-new-file'
 import SExport from '@/svg/s-export'
 import SSave from '@/svg/s-save'
-
-/* TODO li.panel__item
-            v-panel-button(
-                cssClass="panel__button"
-                text="Экспорт"
-        ----->  :active="false"  <-----
-*/
+import SSettings from '@/svg/s-settings'
 
 export default {
     props: {
@@ -137,29 +143,38 @@ export default {
         SModeling,
         SDrawingSquare,
         SDrawingDot,
-        SImport,
+        SNewFile,
         SExport,
-        SSave
+        SSave,
+        SSettings
     },
     setup(){
         const store = useStore();
 
         const coordinateAxesClick = () =>
             store.dispatch("panel/coordinateAxesClick");
+        const isAddCoordinates = computed(() =>
+            store.getters["panel/addCoordinates"]);
 
         const reviewActive = computed(() =>
             store.getters["panel/review"])
         const reviewClick = () =>
             store.dispatch("panel/reviewClick");
 
-        const squareClick = () =>
-            store.dispatch("panel/squareClick");
+        const cubeClick = () =>
+            store.dispatch("panel/cubeClick");
+        const isModelingCube = computed(() =>
+            store.getters["panel/modelingCube"])
 
         const sphereClick = () =>
             store.dispatch("panel/sphereClick")
+        const isModelingSphere = computed(() =>
+            store.getters["panel/modelingSphere"])
 
         const cylinderClick = () =>
             store.dispatch("panel/cylinderClick")
+        const isModelingCylinder = computed(() =>
+            store.getters["panel/modelingCylinder"])
 
         const coordinatesClick = () =>
             store.dispatch("panel/addCoordinateClick");
@@ -179,25 +194,38 @@ export default {
         const toggleOperation = name =>
             store.dispatch("panel/toggleOperation", { key: name })
 
-        const exportModal = computed(() =>
-            store.getters["panel/exportModal"])
 
         const clickExportModal = () =>
             store.dispatch("panel/clickExportModal")
+        const exportModal = computed(() =>
+            store.getters["panel/exportModal"])
+
+        const settingsClick = () =>
+            store.dispatch("panel/settingsClick")
+        const isSettingsModal = computed(() =>
+            store.getters["panel/settingsModal"])
 
         const clickSave = () =>
             store.dispatch("panel/clickSave")
         const isSaveActive = computed(() =>
             store.getters["panel/saveModal"])
 
+        const newClickHandler = () =>
+            window.open(window.location.origin,'blank')
+
         return {
             coordinateAxesClick,
             reviewActive,
             reviewClick,
-            squareClick,
+            cubeClick,
             coordinatesClick,
+
             sphereClick,
+            isModelingSphere,
+
             cylinderClick,
+            isModelingCylinder,
+
             drawing,
             setDrawing,
             setModeling,
@@ -207,18 +235,22 @@ export default {
             clickExportModal,
             exportModal,
             clickSave,
-            isSaveActive
+            isSaveActive,
+            newClickHandler,
+            isAddCoordinates,
+            isModelingCube,
+
+            settingsClick,
+            isSettingsModal
         }
     }
 }
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .panel
     padding: 7px 10px 6px 10px
-    background-color: $backgroud
+    background-color: var(--backgroud)
     &__list
         padding-top: 3px
         display: flex
@@ -228,10 +260,10 @@ export default {
         overflow-y: hidden
         &::-webkit-scrollbar
             height: 5px
-            background-color: $backgroud
+            background-color: var(--backgroud)
             border-radius: 2px
         &::-webkit-scrollbar-thumb
-            background-color: $button-color-dark
+            background-color: var(--button-color-dark)
             border-radius: 2px
     &__button
         width: 120px
@@ -242,7 +274,7 @@ export default {
             content: ""
             height: 100%
             width: 2px
-            background-color: $button-color-dark
+            background-color: var(--button-color-dark)
             position: absolute
             top: 0
             right: 0
@@ -253,7 +285,7 @@ export default {
             content: ""
             height: 100%
             width: 2px
-            background-color: $button-color-dark
+            background-color: var(--button-color-dark)
             position: absolute
             top: 0
             left: 0

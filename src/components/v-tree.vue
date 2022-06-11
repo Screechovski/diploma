@@ -86,10 +86,8 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../assets/variables"
-
 .tree
-    background-color: $backgroud
+    background-color: var(--backgroud)
     padding: 10px 6px 10px 10px
     &__list
         display: flex
@@ -99,21 +97,21 @@ export default {
         overflow: auto
         &::-webkit-scrollbar
             width: 5px
-            background-color: $backgroud
+            background-color: var(--backgroud)
             border-radius: 2px
         &::-webkit-scrollbar-thumb
-            background-color: $button-color-dark
+            background-color: var(--button-color-dark)
             border-radius: 2px
     &__item
         margin-right: 4px
 
 .tree-item
     padding: 7px
-    color: $button-color
+    color: var(--button-color)
     display: flex
     flex-direction: column
-    border: 2px solid $backgroud-light
-    background-color: $backgroud
+    border: 2px solid  var(--backgroud-light)
+    background-color: var(--backgroud)
     gap: 5px
     &__name
         grid-area: name
@@ -130,8 +128,8 @@ export default {
     &__button
         height: 21px
         width: 21px
-        color: $button-color-dark
-        border: 1px solid $button-color-dark
+        color: var(--button-color-dark)
+        border: 1px solid var(--button-color-dark)
         background-color: transparent
         cursor: pointer
         padding: 0
@@ -139,14 +137,14 @@ export default {
         align-items: center
         justify-content: center
         .svg
-            fill: $button-color-dark
+            fill: var(--button-color-dark)
             height: 70%
             width: 70%
         &:hover
-            color: $button-color
-            border-color: $button-color
+            color: var(--button-color)
+            border-color: var(--button-color)
             .svg
-                fill: $button-color
+                fill: var(--button-color)
     &__button-row
         display: flex
         gap: 5px

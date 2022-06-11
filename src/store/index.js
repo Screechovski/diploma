@@ -4,6 +4,7 @@ import { popups } from "@/store/popups/popups"
 import { panel } from "@/store/panel/panel"
 import { tree } from "@/store/tree/tree"
 import { helper } from "@/store/helper/helper"
+import { core } from "@/store/core/core"
 
 const store = createStore({
     namespaced: true,
@@ -12,7 +13,8 @@ const store = createStore({
         popups,
         panel,
         tree,
-        helper
+        helper,
+        core
     },
 })
 

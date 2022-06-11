@@ -1,6 +1,6 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-rectangle" pKey="sphereParams")
+v-popup(cssClass="v-popup-rectangle" pKey="sphereParams" @onClose="closeHandler")
     template(#header="") Параметры шара
     template(#content="")
         .v-popup-rectangle__inner
@@ -71,24 +71,28 @@ export default {
             fields.value.every(i => i.valid))
 
         const fieldHandler = (id) => (value) => {
-            let cleanValue = value.replace(/[^0-9]/gi, '');
-            fieldsObject[id].value = cleanValue;
-            fieldsObject[id].valid = !(/[^0-9]/).test(cleanValue);
+            fieldsObject[id].value = value;
+            fieldsObject[id].valid = !isNaN(+value);
         }
 
         const submit = () => {
             const cleanValues = {};
             Object.values(fieldsObject).forEach(item =>
-                cleanValues[item.id] = item.value)
+                cleanValues[item.id] = parseFloat(item.value))
 
+            console.log(cleanValues);
             store.dispatch("panel/sphereSubmit", cleanValues)
         }
+
+        const closeHandler = () =>
+            store.dispatch("panel/disactiveSphereParams")
 
         return {
             fields,
             canSubmit,
             fieldHandler,
-            submit
+            submit,
+            closeHandler
         }
     }
 }

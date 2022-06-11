@@ -1,6 +1,6 @@
 <template lang="pug">
 
-v-popup(cssClass="v-popup-rectangle" pKey="rectangleParams")
+v-popup(cssClass="v-popup-rectangle" pKey="rectangleParams" @onClose="closeHandler")
     template(#header="") Параметры куба
     template(#content="")
         .v-popup-rectangle__inner
@@ -85,25 +85,28 @@ export default {
             fields.value.every(i => i.valid))
 
         const fieldHandler = (id) => (value) => {
-            let cleanValue = value.replace(/[^0-9]/gi, '');
-            fieldsObject[id].value = cleanValue;
-            fieldsObject[id].valid = !(/[^0-9]/).test(cleanValue);
+            fieldsObject[id].value = value;
+            fieldsObject[id].valid = !isNaN(+value);
         }
 
         const submit = () => {
             const cleanValues = {};
             fields.value.forEach(i => {
-                cleanValues[i.id] = i.value;
+                cleanValues[i.id] = parseFloat(i.value);
             })
-            store.dispatch("panel/squareSubmit", cleanValues)
+            store.dispatch("panel/cubeSubmit", cleanValues)
         }
+
+        const closeHandler = () =>
+            store.dispatch("panel/disactiveCubeParams");
 
         return {
             fields,
             canSubmit,
             fieldHandler,
             submit,
-            attr
+            attr,
+            closeHandler
         }
     }
 }

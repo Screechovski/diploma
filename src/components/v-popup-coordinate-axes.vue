@@ -1,6 +1,6 @@
 <template lang="pug">
 
-v-popup(cssClass="popup-coordinate-axes" pKey="coordinateAxes")
+v-popup(cssClass="popup-coordinate-axes" pKey="coordinateAxes" @onClose="closeCoordinatesHandler")
     template(#header="") Выбрать рабочую плоскость
     template(#content="")
         .popup-coordinate-axes__inner
@@ -63,11 +63,15 @@ export default {
         const canSubmit = computed(() =>
             checkboxes.some(i => i.selected))
 
+        const closeCoordinatesHandler = () =>
+            store.dispatch("panel/disactiveCoordinateAxes")
+
         return {
             checkboxes,
             checkboxHandler,
             submitHandler,
             canSubmit,
+            closeCoordinatesHandler
         }
     }
 }
