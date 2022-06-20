@@ -1,7 +1,7 @@
 <template lang="pug">
 
 v-popup(cssClass="v-popup-save" pKey="saveModal" @onClose="closeSaveHandler")
-    template(#header="") Сохранить проект
+    template(#header="") cохранить проект
     template(#content="")
         .v-popup-save__inner
             v-button(

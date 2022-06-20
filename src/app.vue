@@ -83,6 +83,9 @@ export default {
                     store.dispatch("modeller/keyPress", [isDown, "shift"])
                     break;
                 }
+                case "control": {
+                    store.dispatch("modeller/keyPress", [isDown, "ctrl"])
+                }
                 default:
                     break;
             }

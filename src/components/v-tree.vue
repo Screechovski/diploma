@@ -148,6 +148,4 @@ export default {
     &__button-row
         display: flex
         gap: 5px
-
-
 </style>

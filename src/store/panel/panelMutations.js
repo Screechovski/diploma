@@ -5,6 +5,7 @@ export const panelMutations = {
     setDrawing: defaultMutation("drawing"),
     drawingSquare: defaultMutation("drawingSquare"),
     drawingPoint: defaultMutation("drawingPoint"),
+    drawingCircle: defaultMutation("drawingCircle"),
     setExport: defaultMutation("exportModal"),
     setSave: defaultMutation("saveModal"),
     setAxis: defaultMutation("addCoordinates"),

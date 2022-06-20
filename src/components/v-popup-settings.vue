@@ -9,7 +9,7 @@ v-popup(cssClass="v-popup-settings" pKey="settingsModal" @onClose="closeHandler"
                     span {{variablesRu[key]}}
                     input(type="color" :value="fields[key]" @change="(e) => changeColorHandler(key)(e)")
             v-button(
-                text="Сбросить все цвета"
+                text="Тема по умолчанию"
                 :disabled="false"
                 @press="resetHandler"
             )

@@ -7,6 +7,7 @@ export const panelState = () => ({
 
     drawingSquare: false,
     drawingPoint: false,
+    drawingCircle: false,
 
     modelingCube: false,
     modelingCylinder: false,

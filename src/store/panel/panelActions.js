@@ -109,7 +109,7 @@ export const panelActions = {
 
         context.dispatch("modeller/selectOperation", [FlagAliases[key], futureFlag], {root: true})
 
-        context.dispatch("helper/setLine", UserHelp.point.clickForDot, {root: true})
+
 
         /*console.log("needRemove", needRemove);
 

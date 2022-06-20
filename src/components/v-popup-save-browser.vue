@@ -1,7 +1,7 @@
 <template lang="pug">
 
 v-popup(cssClass="v-popup-save-browser" pKey="saveBrowserModal")
-    template(#header="") Сохранить проект в браузере
+    template(#header="") cохранить проект в браузере
     template(#content="")
         .v-popup-save-browser__inner
             v-field(

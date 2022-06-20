@@ -9,6 +9,7 @@ export const panelGetters = {
         "drawing",
         "drawingSquare",
         "drawingPoint",
+        "drawingCircle",
         "exportModal",
         "saveModal",
         "modelingCube",

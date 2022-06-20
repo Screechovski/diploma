@@ -1,11 +1,13 @@
 export const FlagAliases = {
     drawingSquare: "square",
     drawingPoint: "point",
+    drawingCircle: "circle",
 }
 
 export const FlagAliasesReversed = {
     square: "drawingSquare",
     point: "drawingPoint",
+    circle: "drawingCircle",
 }
 
 export const UserHelp = {
@@ -13,7 +15,12 @@ export const UserHelp = {
         clickForDot: "Нажмите ЛКМ чтобы добавить точку"
     },
     square: {
-        clickForStart: "Нажмите ЛКМ чтобы выбрать центральную точку прямоугольника"
+        clickForStart: "Нажмите ЛКМ чтобы выбрать центральную точку прямоугольника",
+        clickForEnd: "Нажмите ЛКМ чтобы построить прямоугольник"
+    },
+    circle: {
+        clickForStart: "Нажмите ЛКМ чтобы выбрать центральную точку круга",
+        clickForEnd: "Нажмите ЛКМ чтобы построить круг"
     },
     modelingCube: {
         clickForStart: "Введите все необходимые для посмтроения куба параметры, и нажмите 'создать'"

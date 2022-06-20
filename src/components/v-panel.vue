@@ -21,6 +21,14 @@ section.panel(:class="cssClass")
             li.panel__item
                 v-panel-button(
                     cssClass="panel__button"
+                    text="Круг"
+                    :active="drawingCircle"
+                    @onClick="toggleOperation('drawingCircle')"
+                )
+                    s-drawing-circle
+            li.panel__item
+                v-panel-button(
+                    cssClass="panel__button"
                     text="Точка"
                     :active="drawingPoint"
                     @onClick="toggleOperation('drawingPoint')"
@@ -122,6 +130,7 @@ import SSphere from '@/svg/s-sphere'
 import SDrawing from '@/svg/s-drawing'
 import SModeling from '@/svg/s-modeling'
 import SDrawingSquare from '@/svg/s-drawing-square'
+import SDrawingCircle from '@/svg/s-drawing-circle'
 import SDrawingDot from '@/svg/s-drawing-dot'
 import SNewFile from '@/svg/s-new-file'
 import SExport from '@/svg/s-export'
@@ -143,6 +152,7 @@ export default {
         SModeling,
         SDrawingSquare,
         SDrawingDot,
+        SDrawingCircle,
         SNewFile,
         SExport,
         SSave,
@@ -191,6 +201,8 @@ export default {
             store.getters["panel/drawingSquare"])
         const drawingPoint = computed(() =>
             store.getters["panel/drawingPoint"])
+        const drawingCircle = computed(() =>
+            store.getters["panel/drawingCircle"])
         const toggleOperation = name =>
             store.dispatch("panel/toggleOperation", { key: name })
 
@@ -230,8 +242,11 @@ export default {
             setDrawing,
             setModeling,
             toggleOperation,
+
             drawingSquare,
             drawingPoint,
+            drawingCircle,
+
             clickExportModal,
             exportModal,
             clickSave,

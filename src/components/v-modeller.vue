@@ -29,7 +29,7 @@ export default {
             store.getters["panel/review"]);
 
         const cross = computed(() =>
-            store.getters["panel/drawingPoint"] || store.getters["panel/drawingSquare"]);
+            store.getters["panel/drawingPoint"] || store.getters["panel/drawingSquare"] || store.getters["panel/drawingCircle"] );
 
         const mouseMoveHandler = (e) =>
             store.dispatch("modeller/mouseMove", e);

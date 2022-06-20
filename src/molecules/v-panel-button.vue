@@ -62,7 +62,8 @@ export default {
             width: 100%
             height: 100%
             path,
-            react
+            react,
+            polygon
                 fill: var(--button-color-dark)
     &__text
         font-size: 14px
@@ -75,7 +76,8 @@ export default {
             &__icon
                 .svg
                     path,
-                    react
+                    react,
+                    polygon
                         fill: var(--button-color)
             &__text
                 color: var(--button-color)
